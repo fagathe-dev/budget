@@ -1,0 +1,50 @@
+.wrapper {
+  overflow: auto hidden;
+  width: 100%;
+  height: auto;
+  min-height: 100vh;
+  display: flex;
+  flex-flow: column nowrap;
+  -ms-flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.wrapper .header {
+  min-height: 6.5vh;
+  height: auto;
+  width: 100%;
+}
+
+.wrapper .footer {
+  width: 100%;
+  left: 0!important;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.navbar-toggler {
+  outline: none;
+  border: none;
+}
+
+.navbar-toggler-icon {
+  font-size: 18px;
+  color: var(--bs-white);
+}
+
+.wrapper .main-content {
+  min-height: calc(100vh - 50px);
+  width: 100%;
+  margin-left: 0!important;
+}
+
+.wrapper .dropdown-menu.show {
+  top: 110%;
+}
+
+body {
+  background-color: var(--bs-white);
+}
