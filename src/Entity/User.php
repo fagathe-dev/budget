@@ -48,6 +48,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Expense::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $expenses;
 
+    #[ORM\Column]
+    private ?bool $isConfirm = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $token = null;
+
     public function __construct()
     {
         $this->budgets = new ArrayCollection();
@@ -228,6 +234,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $expense->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isConfirm(): ?bool
+    {
+        return $this->isConfirm;
+    }
+
+    public function setIsConfirm(bool $isConfirm): self
+    {
+        $this->isConfirm = $isConfirm;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }
