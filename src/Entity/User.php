@@ -42,10 +42,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Budget::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Budget::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $budgets;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Expense::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Expense::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $expenses;
 
     public function __construct()

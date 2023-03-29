@@ -2,7 +2,7 @@
 api_dir="/Users/fagathe/workspace/perso/budget"
 api_host="dev.budget.agathefrederick.fr"
 port='5500'
-echo "127.0.0.1\t${api_host}" | sudo tee -a /etc/hosts
+# echo "127.0.0.1\t${api_host}" | sudo tee -a /etc/hosts
 
 # lance le service postgresql
 brew services start postgresql@14
