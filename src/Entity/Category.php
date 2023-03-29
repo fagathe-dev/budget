@@ -34,7 +34,7 @@ class Category
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Expense::class)]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Expense::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $expenses;
 
     public function __construct()
