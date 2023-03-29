@@ -68,6 +68,7 @@ class AppFixtures extends Fixture
             ->setUpdatedAt($this->now)
             ->setPassword($this->hasher->hashPassword($admin, 'admin'))
             ->setUsername($this->faker->userName())
+            ->setIsConfirm(true)
         ;
 
         $manager->persist($admin);
@@ -81,6 +82,7 @@ class AppFixtures extends Fixture
                 ->setUpdatedAt($this->now)
                 ->setPassword($this->hasher->hashPassword($user, 'password'))
                 ->setUsername($this->faker->userName())
+                ->setIsConfirm(true)
             ;
 
             for ($i=0; $i < random_int(3, 6); $i++) { 

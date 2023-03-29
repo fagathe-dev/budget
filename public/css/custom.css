@@ -18,7 +18,7 @@
 
 .wrapper .footer {
   width: 100%;
-  left: 0!important;
+  left: 0 !important;
 }
 
 .dropdown-toggle::after {
@@ -38,11 +38,13 @@
 .wrapper .main-content {
   min-height: calc(100vh - 50px);
   width: 100%;
-  margin-left: 0!important;
+  margin-left: 0 !important;
 }
 
 .wrapper .dropdown-menu.show {
   top: 110%;
+  z-index: 5;
+  background-color: var(--vz-white);
 }
 
 body {
