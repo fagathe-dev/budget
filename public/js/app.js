@@ -13,7 +13,7 @@ File: Main Js File
 	/**
 	 *  global variables
 	 */
-	var navbarMenuHTML = document.querySelector(".navbar-menu").innerHTML;
+	var navbarMenuHTML = document.querySelector(".navbar-menu")?.innerHTML;
 	var horizontalMenuSplit = 7; // after this number all horizontal menus will be moved in More menu options
 	var default_lang = "en"; // set Default Language
 	var language = localStorage.getItem("language");
@@ -870,7 +870,7 @@ File: Main Js File
 		currentPath = (currentPath == "/") ? "/" : currentPath.substring(currentPath.lastIndexOf("/") + 1);
 		if (currentPath) {
 			// navbar-nav
-			var a = document.getElementById("navbar-nav").querySelector('[href="' + currentPath + '"]');
+			var a = document.getElementById("navbar-nav")?.querySelector('[href="' + currentPath + '"]');
 			if (a) {
 				a.classList.add("active");
 				var parentCollapseDiv = a.closest(".collapse.menu-dropdown");
@@ -1104,7 +1104,7 @@ File: Main Js File
 
 	// add listener Sidebar Hover icon on change layout from setting
 	function addEventListenerOnSmHoverMenu() {
-		document.getElementById("vertical-hover").addEventListener("click", function () {
+		document.getElementById("vertical-hover")?.addEventListener("click", function () {
 			if (document.documentElement.getAttribute("data-sidebar-size") === "sm-hover") {
 				document.documentElement.setAttribute("data-sidebar-size", "sm-hover-active");
 			} else if (document.documentElement.getAttribute("data-sidebar-size") === "sm-hover-active") {
