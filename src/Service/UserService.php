@@ -4,6 +4,7 @@ namespace App\Service;
 use App\Entity\User;
 use DateTimeImmutable;
 use Cocur\Slugify\Slugify;
+use App\Utils\ServiceTrait;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -13,6 +14,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class UserService 
 {
+
+    use ServiceTrait;
 
     private $slugify;
 
@@ -61,5 +64,12 @@ final class UserService
 
         return compact('paginatedUsers');
     }
-
+    
+    public function delete(User $user):object
+    {
+        $this->manager->remove($user);
+        $this->manager->flush();
+        
+        return $this->sendNoContent();
+    }
 }

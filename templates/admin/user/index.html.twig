@@ -53,11 +53,12 @@
                                             <i class="ri-pencil-line"></i>
                                         </a>
                                         <a 
-                                            href="{{ path('admin_user_edit', {
+                                            href="{{ path('admin_user_delete', {
                                                 id: user.id
                                             }) }}" 
                                             class="btn btn-ghost-danger waves-effect waves-light btn-icon"
                                             title="Supprimer le compte de {{ user.username }}"
+                                            onclick="deleteUser(event);"
                                         >
                                             <i class="ri-delete-bin-5-line"></i>
                                         </a>
@@ -82,4 +83,23 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        const deleteUser = async (e) => {
+            e.preventDefault();
+            const url = e.target.tagName === 'I' ? e.target.closest('a').href : e.target.href;;
+            try {
+                const response = await fetch(url, {
+                    method: 'DELETE',
+                });
+                if (response.ok && response.status === 204) {
+                    window.location.reload();
+                }
+            } catch (e) {
+                console.error(e)
+            }
+        }
+    </script>
 {% endblock %}

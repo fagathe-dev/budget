@@ -8,6 +8,7 @@ use App\Form\Admin\CreateUserType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/admin/user', name: 'admin_user_')]
@@ -58,6 +59,18 @@ class UserController extends AbstractController
         }
 
         return $this->renderForm('admin/user/edit.html.twig', compact('user', 'form'));
+    }
+
+    #[Route('/{id}', name: 'delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
+    public function delete(User $user):JsonResponse 
+    {
+        $response = $this->service->delete($user);
+
+        return $this->json(
+            $response->data,
+            $response->status,
+            $response->headers
+        );
     }
 
 }
