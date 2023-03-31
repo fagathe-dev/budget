@@ -147,6 +147,11 @@ class AppFixtures extends Fixture
                 'description' => null,
             ],
             [
+                'name' => 'Santé',
+                'icon' => 'ri-hospital-line',
+                'description' => null,
+            ],
+            [
                 'name' => 'Impôts, taxes, frais',
                 'icon' => 'ri-bank-line',
                 'description' => null,
@@ -163,7 +168,7 @@ class AppFixtures extends Fixture
             ],
             [
                 'name' => 'Autres',
-                'icon' => '',
+                'icon' => 'ri-calculator-line',
                 'description' => null,
             ],
         ];
