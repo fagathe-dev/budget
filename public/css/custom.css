@@ -18,11 +18,7 @@
 
 .wrapper .footer {
   width: 100%;
-  left: 0!important;
-}
-
-.dropdown-toggle::after {
-  display: none;
+  left: 0 !important;
 }
 
 .navbar-toggler {
@@ -38,11 +34,33 @@
 .wrapper .main-content {
   min-height: calc(100vh - 50px);
   width: 100%;
-  margin-left: 0!important;
+  margin-left: 0 !important;
 }
 
 .wrapper .dropdown-menu.show {
   top: 110%;
+  left: -75px;
+  z-index: 5;
+  background-color: var(--vz-white);
+}
+
+.wrapper .dropdown-item {
+  display: inline-flex;
+  vertical-align: middle;
+  vertical-align: -webkit-baseline-middle;
+  transition: all 350ms ease-in-out;
+}
+
+.wrapper .dropdown-item:hover {
+  background-color: var(--vz-light);
+}
+
+.wrapper .dropdown-item i {
+  margin-right: .3rem;
+}
+
+hr {
+  opacity: .8;
 }
 
 body {

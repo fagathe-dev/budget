@@ -1,5 +1,9 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+    form_themes: 
+        - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
+    globals:
+        APP_VERSION: '%env(APP_VERSION)%'
 
 when@test:
     twig:
