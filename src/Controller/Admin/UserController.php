@@ -19,9 +19,9 @@ class UserController extends AbstractController
     ){}
 
     #[Route('', name: 'index', methods: ['GET'])]
-    public function index():Response 
+    public function index(Request $request):Response 
     {
-        return $this->render('admin/user/index.html.twig', $this->service->index());
+        return $this->render('admin/user/index.html.twig', $this->service->index($request));
     }
 
     #[Route('/new', name: 'new', methods: ['POST', 'GET'])]
@@ -38,7 +38,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('admin_user_index');
         }
 
-        return $this->renderForm('admin/user/edit.html.twig', compact('form', 'user'));
+        return $this->renderForm('admin/user/new.html.twig', compact('form', 'user'));
     } 
 
 

@@ -7,6 +7,7 @@ use Cocur\Slugify\Slugify;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -24,7 +25,13 @@ final class UserService
     ) {
         $this->slugify = new Slugify;
     }
-
+    
+    /**
+     * save
+     *
+     * @param  mixed $user
+     * @return void
+     */
     public function save(User $user):void 
     {
         $user->getId() !== null ? $user->setUpdatedAt(new DateTimeImmutable) : $user->setRegisteredAt(new DateTimeImmutable);
@@ -35,10 +42,24 @@ final class UserService
         $this->manager->persist($user);
         $this->manager->flush();
     }
-
-    public function index():array 
+    
+    /**
+     * index
+     *
+     * @param  mixed $request
+     * @return array
+     */
+    public function index(Request $request):array 
     {
-        return [];
+        $data = $this->repository->findUsersAdmin();
+
+        $paginatedUsers = $this->paginator->paginate(
+            $data, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            $request->query->getInt('nbItems', 10) /*limit per page*/
+        );
+
+        return compact('paginatedUsers');
     }
 
 }
