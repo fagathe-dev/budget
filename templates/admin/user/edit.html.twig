@@ -2,5 +2,14 @@
 
 {% block main %}
     <h1 class="lead">Éditer l'utilisateur</h1>
-    {{ form(form) }}
+    <div class="mt-2 mb-3">
+        {% include "components/flashes.html.twig" %}
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="my-3">
+                {{ form(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}
