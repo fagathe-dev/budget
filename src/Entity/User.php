@@ -2,15 +2,29 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[
+    UniqueEntity(
+        fields: ['email'],
+        errorPath: 'email',
+        message: 'Cette adresse email est déjà utilisée !'
+    ),
+    UniqueEntity(
+        fields: ['username'],
+        errorPath: 'username',
+        message: 'Ce nom d\'utilisateur est déjà utilisé !'
+    )
+]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -19,6 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank(message: 'L\'adresse e-mail est obligatoire !')]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -34,6 +49,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $registeredAt = null;
 
     #[ORM\Column(length: 80)]
+    #[Assert\NotBlank(message: 'Le nom d\'utilisateur est obligatoire !')]
     private ?string $username = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -53,6 +69,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $token = null;
+
+    public const ROLES = [
+        'Super Administrateur' => 'ROLE_SUPER_ADMIN',
+        'Administrateur' => 'ROLE_ADMIN',
+        'Utilisateur' => 'ROLE_USER'
+    ];
 
     public function __construct()
     {
