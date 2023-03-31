@@ -1,0 +1,105 @@
+{% extends "layouts.html.twig" %}
+
+{% block main %}
+
+    {# Breadcrumb container #}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card" id="usersList">
+                <div class="card-header border-bottom-dashed">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-sm">
+                            <div>
+                                <h5 class="card-title mb-0">Liste des utilisateurs</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm-auto">
+                            <div class="d-flex flex-wrap align-items-start gap-2">
+                                <a href="{{ path('admin_user_new') }}" class="btn btn-success">
+                                    <i class="ri-add-line align-bottom me-1"></i>
+                                    Ajouter un utilisateur
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-responsive table-card mb-1 w-100">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Nom d'utilisateur</th>
+                                <th scope="col">E-mail</th>
+                                <th scope="col">Rôles</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in paginatedUsers %}
+                                <tr>
+                                    <th scope="row">{{ user.id }}</th>
+                                    <td>{{ user.username }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ user.roles|join(', ') }}</td>
+                                    <td>
+                                        <a 
+                                            href="{{ path('admin_user_edit', {
+                                                id: user.id
+                                            }) }}" 
+                                            class="btn btn-ghost-info waves-effect waves-light btn-icon"
+                                            title="Modifier le compte de {{ user.username }}"
+                                        >
+                                            <i class="ri-pencil-line"></i>
+                                        </a>
+                                        <a 
+                                            href="{{ path('admin_user_delete', {
+                                                id: user.id
+                                            }) }}" 
+                                            class="btn btn-ghost-danger waves-effect waves-light btn-icon"
+                                            title="Supprimer le compte de {{ user.username }}"
+                                            onclick="deleteUser(event);"
+                                        >
+                                            <i class="ri-delete-bin-5-line"></i>
+                                        </a>
+                                    </td>
+                                </tr>                                
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between">
+                        <div class="result-infos">
+                            <span class="fw-bold">{{ paginatedUsers.items|length }}</span>
+                            sur 
+                            {{ paginatedUsers.getTotalItemCount }}
+                        </div>
+                        <div class="pagination-wrap hstack">
+                            {{ knp_pagination_render(paginatedUsers) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        const deleteUser = async (e) => {
+            e.preventDefault();
+            const url = e.target.tagName === 'I' ? e.target.closest('a').href : e.target.href;;
+            try {
+                const response = await fetch(url, {
+                    method: 'DELETE',
+                });
+                if (response.ok && response.status === 204) {
+                    window.location.reload();
+                }
+            } catch (e) {
+                console.error(e)
+            }
+        }
+    </script>
+{% endblock %}
