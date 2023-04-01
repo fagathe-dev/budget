@@ -53,7 +53,7 @@ final class CategoryService
     public function save(Category $category):void
     {
         $category->getId() !== null ? $category->setUpdatedAt($this->now()) : $category->setCreatedAt($this->now());
-        $category->setSlug($this->slugify->slugify($category->getName()));
+        $category->setSlug($this->slugify->slugify($category->getSlug() ?? $category->getName()));
 
         $this->manager->persist($category);
         $this->manager->flush();

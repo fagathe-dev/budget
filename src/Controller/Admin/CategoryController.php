@@ -3,6 +3,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Category;
 use App\Service\CategoryService;
+use App\Form\Admin\EditCategoryType;
 use App\Form\Admin\CreateCategoryType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,6 +39,24 @@ class CategoryController extends AbstractController
         }
 
         return $this->renderForm('admin/category/new.html.twig', compact('form', 'category'));
+    }
+    
+    #[Route('/{id}', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    public function editCategory(Category $category, Request $request):Response 
+    {
+        $form = $this->createForm(EditCategoryType::class, $category);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->service->save($category);
+
+            $this->addFlash('success', 'Categorie enregistré.');
+            return $this->redirectToRoute('admin_category_edit', [
+                'id' => $category->getId(),
+            ]);
+        }
+
+        return $this->renderForm('admin/category/edit.html.twig', compact('form', 'category'));
     }
 
 }

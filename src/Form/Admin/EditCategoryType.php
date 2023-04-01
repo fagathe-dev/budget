@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-class CreateCategoryType extends AbstractType
+class EditCategoryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -20,6 +20,9 @@ class CreateCategoryType extends AbstractType
             ])
             ->add('icon', TextType::class, [
                 'label' => 'Icon',
+            ])
+            ->add('slug', TextType::class, [
+                'label' => 'Permalien',
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
