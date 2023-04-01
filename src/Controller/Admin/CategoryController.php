@@ -1,11 +1,13 @@
 <?php 
 namespace App\Controller\Admin;
 
+use App\Entity\Category;
 use App\Service\CategoryService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Form\Admin\CreateCategoryType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/admin/category', name: 'admin_category_')]
 class CategoryController extends AbstractController
@@ -19,6 +21,23 @@ class CategoryController extends AbstractController
     public function index(Request $request):Response 
     {
         return $this->render('admin/category/index.html.twig', $this->service->index($request));
+    }
+    
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+    public function newCategory(Request $request):Response 
+    {
+        $category = new Category;
+        $form = $this->createForm(CreateCategoryType::class, $category);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->service->save($category);
+
+            $this->addFlash('success', 'Categorie enregistré.');
+            return $this->redirectToRoute('admin_category_index');
+        }
+
+        return $this->renderForm('admin/category/new.html.twig', compact('form', 'category'));
     }
 
 }

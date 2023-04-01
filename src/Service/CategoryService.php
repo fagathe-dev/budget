@@ -1,6 +1,7 @@
 <?php 
 namespace App\Service;
 
+use App\Entity\Category;
 use Cocur\Slugify\Slugify;
 use App\Utils\ServiceTrait;
 use App\Repository\CategoryRepository;
@@ -41,5 +42,20 @@ final class CategoryService
         );
 
         return compact('paginatedCategories');
+    }
+    
+    /**
+     * save
+     *
+     * @param  mixed $category
+     * @return void
+     */
+    public function save(Category $category):void
+    {
+        $category->getId() !== null ? $category->setUpdatedAt($this->now()) : $category->setCreatedAt($this->now());
+        $category->setSlug($this->slugify->slugify($category->getName()));
+
+        $this->manager->persist($category);
+        $this->manager->flush();
     }
 }
