@@ -1,0 +1,103 @@
+{% extends "layouts.html.twig" %}
+
+{% block main %}
+
+    {# Breadcrumb container #}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card" id="CategoriesList">
+                <div class="card-header border-bottom-dashed">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-sm">
+                            <div>
+                                <h5 class="card-title mb-0">Liste des catégories</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm-auto">
+                            <div class="d-flex flex-wrap align-items-start gap-2">
+                                {# href="{{ path('admin_category_new') }}"  #}
+                                <a 
+                                    class="btn btn-success">
+                                    <i class="ri-add-line align-bottom me-1"></i>
+                                    Ajouter un utilisateur
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-responsive table-card mb-1 w-100">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Nom</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for category in paginatedCategories %}
+                                <tr>
+                                    <th scope="row">{{ category.id }}</th>
+                                    <td>{{ category.name }}</td>
+                                    <td>
+                                            {# href="{{ path('admin_category_edit', {
+                                                id: category.id
+                                            }) }}"  #}
+                                        <a 
+                                            class="btn btn-ghost-info waves-effect waves-light btn-icon"
+                                            title="Modifier la catégorie de {{ category.name }}"
+                                        >
+                                            <i class="ri-pencil-line"></i>
+                                        </a>
+                                            {# href="{{ path('admin_user_delete', {
+                                                id: user.id
+                                            }) }}"  #}
+                                        <a 
+                                            class="btn btn-ghost-danger waves-effect waves-light btn-icon"
+                                            title="Supprimer la catégorie de {{ category.name }}"
+                                            onclick="deleteCategory(event);"
+                                        >
+                                            <i class="ri-delete-bin-5-line"></i>
+                                        </a>
+                                    </td>
+                                </tr>                                
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between">
+                        <div class="result-infos">
+                            <span class="fw-bold">{{ paginatedCategories.items|length }}</span>
+                            sur 
+                            {{ paginatedCategories.getTotalItemCount }}
+                        </div>
+                        <div class="pagination-wrap hstack">
+                            {{ knp_pagination_render(paginatedCategories) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        const deleteCategory = async (e) => {
+            e.preventDefault();
+            const url = e.target.tagName === 'I' ? e.target.closest('a').href : e.target.href;;
+            try {
+                const response = await fetch(url, {
+                    method: 'DELETE',
+                });
+                if (response.ok && response.status === 204) {
+                    window.location.reload();
+                }
+            } catch (e) {
+                console.error(e)
+            }
+        }
+    </script>
+{% endblock %}
