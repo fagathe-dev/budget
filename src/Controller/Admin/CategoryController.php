@@ -8,6 +8,7 @@ use App\Form\Admin\CreateCategoryType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/admin/category', name: 'admin_category_')]
@@ -59,4 +60,16 @@ class CategoryController extends AbstractController
         return $this->renderForm('admin/category/edit.html.twig', compact('form', 'category'));
     }
 
+    #[Route('/{id}', name: 'delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
+    public function delete(Category $category):JsonResponse 
+    {
+        $response = $this->service->delete($category);
+
+        return $this->json(
+            $response->data,
+            $response->status,
+            $response->headers
+        );
+    }
+    
 }

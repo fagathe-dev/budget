@@ -58,4 +58,12 @@ final class CategoryService
         $this->manager->persist($category);
         $this->manager->flush();
     }
+
+    public function delete(Category $category):object
+    {
+        $this->manager->remove($category);
+        $this->manager->flush();
+        
+        return $this->sendNoContent();
+    }
 }

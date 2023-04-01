@@ -52,10 +52,10 @@
                                         >
                                             <i class="ri-pencil-line"></i>
                                         </a>
-                                            {# href="{{ path('admin_user_delete', {
-                                                id: user.id
-                                            }) }}"  #}
                                         <a 
+                                            href="{{ path('admin_category_delete', {
+                                                id: category.id
+                                            }) }}" 
                                             class="btn btn-ghost-danger waves-effect waves-light btn-icon"
                                             title="Supprimer la catégorie de {{ category.name }}"
                                             onclick="deleteCategory(event);"
