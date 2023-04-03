@@ -4,6 +4,12 @@
 
     {# Breadcrumb container #}
 
+<<<<<<< HEAD
+=======
+    <div class="mt-2 mb-3">
+        {% include "components/flashes.html.twig" %}
+    </div>
+>>>>>>> feat/admin-category
     <div class="row">
         <div class="col-lg-12">
             <div class="card" id="usersList">
@@ -89,16 +95,19 @@
     <script>
         const deleteUser = async (e) => {
             e.preventDefault();
-            const url = e.target.tagName === 'I' ? e.target.closest('a').href : e.target.href;;
-            try {
-                const response = await fetch(url, {
-                    method: 'DELETE',
-                });
-                if (response.ok && response.status === 204) {
-                    window.location.reload();
+            const consent = confirm('Êtes-vous sûr de supprimer cet utilisateur ?');
+            if (consent) {
+                const url = e.target.tagName === 'I' ? e.target.closest('a').href : e.target.href;;
+                try {
+                    const response = await fetch(url, {
+                        method: 'DELETE',
+                    });
+                    if (response.ok && response.status === 204) {
+                        window.location.reload();
+                    }
+                } catch (e) {
+                    console.error(e)
                 }
-            } catch (e) {
-                console.error(e)
             }
         }
     </script>
