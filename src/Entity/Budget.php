@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\BudgetRepository;
+use App\Entity\Category;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\BudgetRepository;
 
 #[ORM\Entity(repositoryClass: BudgetRepository::class)]
 class Budget
@@ -19,7 +20,7 @@ class Budget
     #[ORM\ManyToOne(inversedBy: 'budgets')]
     private ?User $user = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'budget')]
     private ?Category $category = null;
 
     public function getId(): ?int
@@ -62,4 +63,5 @@ class Budget
 
         return $this;
     }
+
 }

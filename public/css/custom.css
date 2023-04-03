@@ -19,6 +19,7 @@
 .wrapper .footer {
   width: 100%;
   left: 0 !important;
+  position: unset;
 }
 
 .navbar-toggler {
@@ -33,6 +34,7 @@
 
 .wrapper .main-content {
   min-height: calc(100vh - 50px);
+  height: auto;
   width: 100%;
   margin-left: 0 !important;
 }

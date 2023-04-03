@@ -34,12 +34,16 @@ class Category
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Expense::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Expense::class, orphanRemoval: true, cascade: ['persist', 'remove', 'detach'])]
     private Collection $expenses;
+
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Budget::class, orphanRemoval: false, cascade: ['persist', 'remove', 'detach'])]
+    private Collection $budget;
 
     public function __construct()
     {
         $this->expenses = new ArrayCollection();
+        $this->budget = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,6 +147,36 @@ class Category
             // set the owning side to null (unless already changed)
             if ($expense->getCategory() === $this) {
                 $expense->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Budget>
+     */
+    public function getBudget(): Collection
+    {
+        return $this->budget;
+    }
+
+    public function addBudget(Budget $budget): self
+    {
+        if (!$this->budget->contains($budget)) {
+            $this->budget->add($budget);
+            $budget->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBudget(Budget $budget): self
+    {
+        if ($this->budget->removeElement($budget)) {
+            // set the owning side to null (unless already changed)
+            if ($budget->getCategory() === $this) {
+                $budget->setCategory(null);
             }
         }
 
