@@ -1,1 +1,9 @@
 {% extends "layouts.html.twig" %}
+
+{% block main %}
+    {% include "default/expense_form.html.twig" %}
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/pages/dashboard.css') }}">
+{% endblock %}
