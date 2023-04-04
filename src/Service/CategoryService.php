@@ -2,8 +2,8 @@
 namespace App\Service;
 
 use App\Entity\Category;
-use Cocur\Slugify\Slugify;
 use App\Utils\ServiceTrait;
+use Cocur\Slugify\Slugify;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
