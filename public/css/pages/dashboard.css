@@ -15,9 +15,9 @@
 }
 
 .budget-container {
-    width: 100%;
-    height: auto;
-    margin: 1rem auto 1.5rem;
+  width: 100%;
+  height: auto;
+  margin: 1rem auto 1.5rem;
 }
 
 .budget-repeater {
@@ -32,13 +32,37 @@
 }
 
 .budget-repeater > * {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .budget-repeater > *:last-child {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 .budget-repeater::-webkit-scrollbar {
-    display: none;
+  display: none;
+}
+
+.expense-category__icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 30px;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--vz-light);
+}
+
+.expense {
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+.expense:first-child {
+  margin-top: 0;
+}
+
+.expense:last-child {
+  margin-bottom: 0;
 }
