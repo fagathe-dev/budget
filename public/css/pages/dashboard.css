@@ -1,15 +1,44 @@
 .btn-rounded {
-    border-radius: 10px;
+  border-radius: 10px;
 }
 
 #modalFormExpense {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    z-index: 99999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: .15rem .5rem;
-    font-size: 25px;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.15rem 0.5rem;
+  font-size: 25px;
+}
+
+.budget-container {
+    width: 100%;
+    height: auto;
+    margin: 1rem auto 1.5rem;
+}
+
+.budget-repeater {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  overflow-x: auto;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.budget-repeater > * {
+    margin-right: 10px;
+}
+
+.budget-repeater > *:last-child {
+    margin-right: 0;
+}
+
+.budget-repeater::-webkit-scrollbar {
+    display: none;
 }
