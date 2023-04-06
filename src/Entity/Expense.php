@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\ExpenseRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ExpenseRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ExpenseRepository::class)]
 class Expense
@@ -14,24 +15,30 @@ class Expense
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['api_dashboard'])]
     private ?float $amount = null;
 
     #[ORM\ManyToOne(inversedBy: 'expenses')]
     private ?User $user = null;
 
     #[ORM\Column(length: 80)]
+    #[Groups(['api_dashboard'])]
     private ?string $label = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['api_dashboard'])]
     private ?bool $isPaid = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['api_dashboard'])]
     private ?\DateTimeImmutable $paidAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'expenses')]
+    #[Groups(['api_dashboard'])]
     private ?Category $category = null;
 
     #[ORM\Column]
+    #[Groups(['api_dashboard'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     public function getId(): ?int

@@ -18,8 +18,15 @@ class DashboardController extends AbstractController
     #[Route('', name: 'index')]
     public function index():JsonResponse
     {
-        dd($this->apiService->getData());
-        return $this->json([]);
+        $response = $this->apiService->getData();
+        return $this->json(
+            $response->data,
+            $response->status,
+            $response->headers,
+            [
+                'groups' => ['api_dashboard'],
+            ]
+        );
     }
 
 }

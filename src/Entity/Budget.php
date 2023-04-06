@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Category;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\BudgetRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BudgetRepository::class)]
 class Budget
@@ -12,15 +13,18 @@ class Budget
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['api_dashboard'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['api_dashboard'])]
     private ?int $amount = null;
 
     #[ORM\ManyToOne(inversedBy: 'budgets')]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'budget')]
+    #[Groups(['api_dashboard'])]
     private ?Category $category = null;
 
     public function getId(): ?int

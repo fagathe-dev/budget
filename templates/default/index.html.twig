@@ -9,3 +9,11 @@
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/pages/dashboard.css') }}">
 {% endblock %}
+
+{% block javascripts %}
+    <script>
+        const API_BASE_URL = window.location?.origin;
+        const API_DATA_URL = window.location?.origin + "{{ path('api_dashboard_index') }}";
+    </script>
+    <script src="{{ asset('js/pages/dashboard.js') }}"></script>
+{% endblock %}

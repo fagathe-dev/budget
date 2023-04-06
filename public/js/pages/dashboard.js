@@ -1,6 +1,19 @@
 (() => {
-    
-    const loadData = async () => {}
+
+    const store = (data = {}) => window.localStorage.setItem('data', JSON.stringify(data));
+
+    const loadData = async () => {
+        try {
+            const response = await fetch(API_DATA_URL);
+            if (response.ok && response.status === 200) {
+                const data = await response.json();
+                store(data);
+            }
+        } catch (e) {
+            console.error(e)
+        }
+
+    }
 
     const handleCreateExpense = (e) => {}
 
@@ -17,6 +30,8 @@
         return template.content.cloneNode(true);
     }
 
-    const store = (data = {}) => {}
+    window.onload = () => {
+        loadData();
+    }
 
-})()
+})();
