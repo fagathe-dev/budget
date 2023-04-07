@@ -1,69 +1,69 @@
 <div class="expenses-container">
     <h2 class="h3">Mes dépenses</h2>
-    <div class="expenses-container">
-    {% for i, key in range(1, random(3, 10)) %}
-        <div class="card expense">
-            <div class="card-body">
-                <div class="row justify-content-between">
-                    <div class="col-11">
-                        <div class="row justify-content-between">
-                            <div class="col-2 col-md-1 ps-1 pe-0">
-                                <div class="expense-category__icon">
-                                    <span class="fs-2">
-                                        <i data-expense-category-icon class="ri-car-line text-success icon-dual-succes"></i>
-                                    </span>
-                                </div>   
-                            </div>
-                            <div class="col-10 col-md-11 px-2">
-                                <div class="d-flex flex-row justify-content-between">
-                                    <div class="">
-                                        <h4 data-expense-label class="lead text-underline">Dépense {{ key }}</h4>
-                                        <p data-expense-category-name class="text-muted mb-0">Catégorie {{ key }}</p>
-                                    </div>
-                                    <div class="expense-amount text-danger fs-14">
-                                        <span data-expense-amount class="fs-22 fw-bold">10</span>&euro;
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="w-auto px-0">
-                        <button 
-                            class="btn btn-ghost-primary btn-icon btn-sm dropdown shadow-none" 
-                            type="button" 
-                            data-bs-toggle="dropdown" 
-                            aria-expanded="false"
-                        ><i class="ri-more-2-fill fs-16 align-bottom"></i></button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <a 
-                                    onclick="handleUpdateExpense(event, 'isPaid')" 
-                                    class="dropdown-item view-item-btn" 
-                                    href="javascript:void(0);"
-                                >Est payé</a>
-                            </li>
-                            <li>
-                                <a 
-                                    class="dropdown-item edit-folder-list" 
-                                    href="#createFolderModal" 
-                                    data-bs-toggle="modal" 
-                                    role="button"
-                                >Modifier</a></li>
-                            <li>
-                                <a 
-                                    class="dropdown-item" 
-                                    role="button"
-                                    href="/api/dashboard/expense/1"
-                                    onclick="deleteExpense(event);"
-                                >Supprimer</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
+    <div class="expenses-container" id="expensesContainer">
     </div>
 </div>
 
 <!-- Faire un reduce des dépenses par date -->
+<template id="expenseTemplate">
+    <div class="card expense">
+        <div class="card-body">
+            <div class="row justify-content-between">
+                <div class="col-11">
+                    <div class="row justify-content-between">
+                        <div class="col-2 col-md-1 ps-1 pe-0">
+                            <div class="expense-category__icon">
+                                <span class="fs-2">
+                                    <i data-expense-category-icon class="text-success icon-dual-succes"></i>
+                                </span>
+                            </div>   
+                        </div>
+                        <div class="col-10 col-md-11 px-2">
+                            <div class="d-flex flex-row justify-content-between">
+                                <div class="">
+                                    <h4 data-expense-label class="lead text-underline"></h4>
+                                    <p data-expense-category-name class="text-muted mb-0"></p>
+                                </div>
+                                <div class="expense-amount text-danger fs-14">
+                                    <span data-expense-amount class="fs-22 fw-bold">10</span>&euro;
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-auto px-0">
+                    <button 
+                        class="btn btn-ghost-primary btn-icon btn-sm dropdown shadow-none" 
+                        type="button" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false"
+                    ><i class="ri-more-2-fill fs-16 align-bottom"></i></button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a 
+                                onclick="handleUpdateExpense(event, 'isPaid')" 
+                                class="dropdown-item view-item-btn" 
+                                href="javascript:void(0);"
+                            >Est payé</a>
+                        </li>
+                        <li>
+                            <a 
+                                class="dropdown-item edit-folder-list" 
+                                href="#createFolderModal" 
+                                data-bs-toggle="modal" 
+                                role="button"
+                            >Modifier</a></li>
+                        <li>
+                            <a 
+                                class="dropdown-item" 
+                                role="button"
+                                href="/api/dashboard/expense/1"
+                                onclick="deleteExpense(event);"
+                            >Supprimer</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

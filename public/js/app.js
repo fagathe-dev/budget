@@ -1694,10 +1694,12 @@ window.onscroll = function () {
 };
 
 function scrollFunction() {
-	if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-		mybutton.style.display = "block";
-	} else {
-		mybutton.style.display = "none";
+	if (mybutton) {
+		if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+			mybutton.style.display = "block";
+		} else {
+			mybutton.style.display = "none";
+		}
 	}
 }
 

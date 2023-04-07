@@ -8,8 +8,11 @@ use App\Repository\ExpenseRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class ApiService 
 {
@@ -23,7 +26,9 @@ final class ApiService
         private ExpenseRepository $expenseRepository,
         private BudgetRepository $budgetRepository,
         private EntityManagerInterface $manager,
-        private Security $security
+        private Security $security, 
+        private ValidatorInterface $validator,
+        private SerializerInterface $serializer
     ) {
         $this->session = new Session;
     }
@@ -58,8 +63,30 @@ final class ApiService
      * @param  mixed $request
      * @return object
      */
-    public function saveExpense (Request $request):object {
-        return $this->sendJson();
+    public function createExpense (Request $request):object {
+        $data = $request->getContent();
+        $expense = $this->serializer->deserialize($data, Expense::class, 'json');
+        $data = json_decode($data, true);
+
+        $category = array_key_exists('category', $data) && $data['category'] !== null 
+            ? 
+            $this->categoryRepository->find((int) $data['category']) 
+            : 
+            $this->categoryRepository->findOneBy(['slug' => 'autres']);
+
+        $expense->setCreatedAt($this->now())
+            ->setCategory($category)
+            ->setUser($this->security->getUser())    
+        ;
+
+        if ($expense->isIsPaid()) {
+            $expense->setPaidAt($this->now());
+        }
+
+        // $this->manager->persist($expense);
+        // $this->manager->flush();
+
+        return $this->sendJson($expense, Response::HTTP_CREATED);
     } 
 
 } 

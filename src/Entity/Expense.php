@@ -12,6 +12,7 @@ class Expense
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['api_dashboard'])]
     private ?int $id = null;
 
     #[ORM\Column]
