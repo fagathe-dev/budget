@@ -121,7 +121,7 @@ final class ApiService
         $this->manager->persist($expense);
         $this->manager->flush();
 
-        return $this->sendJson($expense, Response::HTTP_CREATED);
+        return $this->sendJson($expense, Response::HTTP_OK);
     } 
 
 } 

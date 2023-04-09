@@ -65,6 +65,7 @@ class AppFixtures extends Fixture
 
         for ($u=0; $u < random_int(30, 50); $u++) { 
             $user = new User;
+            $userBudgets = $this->randomElements($listCategories);
 
             $user->setEmail($this->faker->email())
                 ->setRoles([$u === 0 ? 'ROLE_ADMIN' : 'ROLE_USER'])
@@ -75,11 +76,11 @@ class AppFixtures extends Fixture
                 ->setIsConfirm(true)
             ;
 
-            for ($i=0; $i < random_int(4, 6); $i++) { 
+            foreach ($userBudgets as $k => $userBudget) { 
                 $budget = new Budget;
 
                 $budget->setAmount($this->faker->randomNumber(3, false))
-                    ->setCategory($this->randomElement($listCategories));
+                    ->setCategory($userBudget);
 
                 $user->addBudget($budget);
             }
@@ -164,11 +165,4 @@ class AppFixtures extends Fixture
             ],
         ];
     } 
-
-    private function randomElement(array $elements):mixed 
-    {
-        shuffle($elements);
-        
-        return $elements[random_int(0, (count($elements) - 1))];
-    }
 }

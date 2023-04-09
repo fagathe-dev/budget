@@ -5,6 +5,7 @@
     data-bs-toggle="modal" 
     data-bs-target="#modalExpense"
     id="modalFormExpense"
+    onclick="initForm();"
 ><i class="ri-add-fill"></i></button>
 <div id="modalExpense" class="modal fade" tabindex="-1" aria-labelledby="modalExpenseLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-fullscreen-sm-down">
@@ -13,7 +14,7 @@
                 <h5 class="modal-title" id="modalExpenseLabel">Ajouter une dépense</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="#" method="POST" name="createExpense">
+            <form action="#" data-action="create" id="expenseForm">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="label" class="form-label">Libellé</label>
@@ -35,6 +36,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" data-bs-dismiss="modal" style="display: none;"></button>
                     <button type="submit" class="btn btn-primary">Enregistrer</button>
                 </div>
             </form>

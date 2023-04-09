@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ExpenseRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ExpenseRepository::class)]
 class Expense
@@ -17,12 +18,15 @@ class Expense
 
     #[ORM\Column]
     #[Groups(['api_dashboard'])]
+    #[Assert\NotBlank(message: 'Ce champ est obligatoire')]
+    #[Assert\Type('float', message: '{{ value }} n\'est pas un nombre valide')]
     private ?float $amount = null;
 
     #[ORM\ManyToOne(inversedBy: 'expenses')]
     private ?User $user = null;
 
     #[ORM\Column(length: 80)]
+    #[Assert\NotBlank(message: 'Ce champ est obligatoire')]
     #[Groups(['api_dashboard'])]
     private ?string $label = null;
 

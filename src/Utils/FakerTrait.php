@@ -15,11 +15,11 @@ trait FakerTrait
      * @return array
      * 
      */
-    public function randomElements(array $array, ?int $num = 1): array
+    public function randomElements(array $array, ?int $num = null): array
     {
         $count = count($array);
         shuffle($array);
-        $array = array_slice($array, 0, $num, true);
+        $array = array_slice($array, 0, $num ?? random_int(1, $count - 1), true);
 
         return $array;
     }
