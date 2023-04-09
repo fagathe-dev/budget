@@ -109,10 +109,7 @@ final class ApiService
             : 
             $this->categoryRepository->findOneBy(['slug' => 'autres']);
 
-        $expense->setCreatedAt($this->now())
-            ->setCategory($category)
-            ->setUser($this->security->getUser())    
-        ;
+        $expense->setCategory($category);
 
         if ($expense->isIsPaid()) {
             $expense->setPaidAt($this->now());
@@ -123,5 +120,19 @@ final class ApiService
 
         return $this->sendJson($expense, Response::HTTP_OK);
     } 
+    
+    /**
+     * deleteExpense
+     *
+     * @param  mixed $expense
+     * @return object
+     */
+    public function deleteExpense(Expense $expense):object
+    {
+        $this->manager->remove($expense);
+        $this->manager->flush();
+
+        return $this->sendNoContent();
+    }
 
 } 

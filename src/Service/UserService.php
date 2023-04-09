@@ -38,8 +38,7 @@ final class UserService
     public function save(User $user):void 
     {
         $user->getId() !== null ? $user->setUpdatedAt(new DateTimeImmutable) : $user->setRegisteredAt(new DateTimeImmutable);
-        $user->setImage(null)
-            ->setPassword($this->hasher->hashPassword($user, $user->getPassword()))
+        $user->setPassword($this->hasher->hashPassword($user, $user->getPassword()))
             ->setIsConfirm(false);
 
         $this->manager->persist($user);

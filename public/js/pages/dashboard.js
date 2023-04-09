@@ -41,6 +41,7 @@ const displayExpense = (expense = {}, container) => {
     clone.querySelector('[data-expense-amount]').innerText = expense?.amount.toFixed(2);
     clone.querySelector('[data-expense-label]').innerText = expense?.label;
     clone.querySelector('[data-expense-edit]').setAttribute('onclick', `fillExpenseForm(${expense.id})`);
+    clone.querySelector('[data-expense-delete]').href = API_DELETE_EXPENSE + expense.id;
 
     return container.appendChild(clone);
 }
@@ -104,7 +105,7 @@ const handleCreateExpense = async (e) => {
         if (response.ok && response.status === 201) {
             // Remise à zéro du formulaire
             form.reset();
-            // Ajouter la dépense dans le store
+            // Recharger les data
             loadData();
             // Recharger la vue
             displayData();
@@ -147,7 +148,7 @@ const handleUpdateExpense = async (e) => {
         });
         
         if (response.ok && response.status === 200) {
-            // Ajouter la dépense dans le store
+            // Recharger les data
             loadData();
             // Recharger la vue
             displayData();
@@ -171,6 +172,29 @@ const loadFormCategories = () => {
     }
 }
 
+const handleDeleteExpense = async (e) => {
+    e.preventDefault();
+    const consent = confirm('Êtes-vous sûr de supprimer cette dépense ?');
+    const url = e.target.href;
+
+    if (consent) {
+        try {
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            });
+            
+            if (response.ok && response.status === 204) {
+                // Recharger les data
+                loadData();
+            }
+        } catch (e) {
+        }
+    }
+}
+
 // Form handle submit 
 expenseForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -178,6 +202,7 @@ expenseForm.addEventListener('submit', async (e) => {
 });
 
 window.onload = () => {
+    // Recharger les data
     loadData();
     loadFormCategories();
 }

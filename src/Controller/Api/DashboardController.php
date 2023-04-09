@@ -46,6 +46,18 @@ class DashboardController extends AbstractController
         );
     }
 
+    #[Route('/expense/{id}', name: 'delete_expense', methods: ['DELETE'], requirements: ['id' => '\d+'])]
+    public function deleteExpense(Expense $expense):JsonResponse
+    {
+        $response = $this->apiService->deleteExpense($expense);
+
+        return $this->json(
+            $response->data,
+            $response->status,
+            $response->headers
+        );
+    }
+
     #[Route('', name: 'index', methods: ['GET'])]
     public function index():JsonResponse
     {
