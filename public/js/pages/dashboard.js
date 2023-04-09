@@ -9,7 +9,18 @@
         return template.content.cloneNode(true);
     }
 
-    const displayBudget = (budget = {}) => {}
+    const sum = (arr = []) => arr.reduce((sum, c) => sum + c.amount, 0);
+
+    const displayBudget = (budget = {}, expenses = [], container) => {
+        const clone = getTemplateClone('budgetTemplate');
+        clone.id = `budget__${budget.id}`;
+        clone.querySelector('[data-budget-category-icon]').classList.add(budget?.category?.icon);
+        clone.querySelector('[data-budget-category-name]').innerText = budget?.category?.name;
+        clone.querySelector('[data-budget-expenses-sum]').innerText = sum(expenses).toFixed(2);
+        clone.querySelector('[data-budget-amount]').innerText = budget?.amount;
+        console.dir(clone);
+        return container.appendChild(clone);
+    }
 
     const displayExpense = (expense = {}, container) => {
         const clone = getTemplateClone('expenseTemplate');
@@ -22,14 +33,29 @@
         return container.appendChild(clone);
     }
 
-    const filterBudgetExpenses = () => {}
+    const filterBudgetExpenses = () => {
+        return storeData()?.expenses?.reduce((acc, obj) => {
+            const k = obj?.category?.slug;
+            if(!acc[k]){
+                acc[k] = [];
+            }
+            acc[k].push(obj);
+            return acc;
+        }, {});
+    }
     
     const displayData = () => {
         const expensesContainer = document.getElementById('expensesContainer');
+        const budgetsContainer = document.getElementById('budgetsContainer');
         expensesContainer.innerHTML = '';
+        budgetsContainer.innerHTML = '';
+        const filterBudgets = filterBudgetExpenses();
         storeData()?.unPaid.forEach((e) => {
             displayExpense(e, expensesContainer);
-        })
+        });
+        storeData()?.budgets.forEach((b) => {
+            displayBudget(b, filterBudgets[b.category.slug], budgetsContainer);
+        });
     }
 
     const loadData = async () => {
@@ -64,7 +90,6 @@
                 },
             });
             if (response.ok && response.status === 201) {
-                const expense = response.json();
                 // Remise à zéro du formulaire
                 form.reset();
                 // Ajouter la dépense dans le store

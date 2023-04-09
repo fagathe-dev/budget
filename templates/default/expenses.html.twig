@@ -41,17 +41,11 @@
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
                             <a 
-                                onclick="handleUpdateExpense(event, 'isPaid')" 
-                                class="dropdown-item view-item-btn" 
-                                href="javascript:void(0);"
-                            >Est payé</a>
-                        </li>
-                        <li>
-                            <a 
                                 class="dropdown-item edit-folder-list" 
-                                href="#createFolderModal" 
                                 data-bs-toggle="modal" 
                                 role="button"
+                                data-bs-target="#modalExpense"
+                                id="modalFormExpenseEdit__"
                             >Modifier</a></li>
                         <li>
                             <a 

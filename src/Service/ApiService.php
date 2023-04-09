@@ -8,11 +8,12 @@ use App\Repository\ExpenseRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 final class ApiService 
 {
@@ -58,7 +59,7 @@ final class ApiService
     }
     
     /**
-     * saveExpense
+     * editExpense
      *
      * @param  mixed $request
      * @return object
@@ -83,8 +84,42 @@ final class ApiService
             $expense->setPaidAt($this->now());
         }
 
-        // $this->manager->persist($expense);
-        // $this->manager->flush();
+        $this->manager->persist($expense);
+        $this->manager->flush();
+
+        return $this->sendJson($expense, Response::HTTP_CREATED);
+    } 
+    
+    /**
+     * editExpense
+     *
+     * @param  mixed $request
+     * @return object
+     */
+    public function editExpense (Expense $expense, Request $request):object {
+        $data = $request->getContent();
+        $expense = $this->serializer->deserialize($data, Expense::class, 'json', [
+            AbstractNormalizer::OBJECT_TO_POPULATE => $expense
+        ]);
+        $data = json_decode($data, true);
+
+        $category = array_key_exists('category', $data) && $data['category'] !== null 
+            ? 
+            $this->categoryRepository->find((int) $data['category']) 
+            : 
+            $this->categoryRepository->findOneBy(['slug' => 'autres']);
+
+        $expense->setCreatedAt($this->now())
+            ->setCategory($category)
+            ->setUser($this->security->getUser())    
+        ;
+
+        if ($expense->isIsPaid()) {
+            $expense->setPaidAt($this->now());
+        }
+
+        $this->manager->persist($expense);
+        $this->manager->flush();
 
         return $this->sendJson($expense, Response::HTTP_CREATED);
     } 

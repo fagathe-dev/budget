@@ -27,6 +27,7 @@ class Category
     private ?string $icon = null;
 
     #[ORM\Column(length: 100, nullable: true)]
+    #[Groups(['api_dashboard'])]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
