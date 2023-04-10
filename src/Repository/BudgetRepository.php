@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Budget;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Category;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Budget>
@@ -16,8 +18,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class BudgetRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        private ManagerRegistry $registry,
+        private Security $security
+    ){
         parent::__construct($registry, Budget::class);
     }
 
@@ -37,6 +41,22 @@ class BudgetRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function hasAlreadyCategory(Category $category):?Budget 
+    {
+        $user = $this->security->getUser();
+
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.category = :category')
+            ->andWhere('b.user = :user')
+            ->setParameters([
+                'category' => $category,
+                'user' => $user,
+            ])
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
     }
 
 //    /**
