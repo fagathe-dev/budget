@@ -7,7 +7,14 @@ const getTemplateClone = selector => {
     return template.content.cloneNode(true);
 }
 
-const sum = (arr = []) => arr.reduce((sum, c) => sum + c.amount, 0);
+const sum = (arr = []) => arr.reduce((sum, c) => {
+    const currentDate = new Date;
+    const month = currentDate.getMonth() < 10 ? '0' + currentDate.getMonth() : currentDate.getMonth();
+    if(c.createdAt.includes(currentDate.getFullYear() + '-' + month)){
+        return sum + c.amount;
+    }
+    return sum;
+}, 0);
 
 const initForm = () => {
     // Réinitialiser le formulaire
