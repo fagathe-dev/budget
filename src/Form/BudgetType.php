@@ -39,6 +39,12 @@ class BudgetType extends AbstractType
                                 return;
                             }
                             if ($this->repository->hasAlreadyCategory($value) instanceof Budget) {
+                        'callback' => function (mixed $value, ExecutionContextInterface $context) use ($builder) {
+                            $budget = $this->repository->hasAlreadyCategory($value);
+                            if (!$value) {
+                                return;
+                            }
+                            if ($budget instanceof Budget && $builder->getData()->getId() !== $budget->getId()) {
                                 return $context
                                     ->buildViolation('Vous avez déjà défini ce budget !')
                                     ->atPath('[category]')

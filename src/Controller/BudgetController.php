@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Entity\Budget;
 use App\Form\BudgetType;
+use App\Security\Voter\BudgetVoter;
 use App\Service\BudgetService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,19 +20,34 @@ class BudgetController extends AbstractController
     ){}
 
     #[Route('/{id}', name: 'delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
-    public function delete(Budget $budget, Request $request):JsonResponse
+    public function delete(Budget $budget):JsonResponse
     {
-        return $this->json([]);
+        $this->denyAccessUnlessGranted(BudgetVoter::BUDGET_EDIT, $budget);
+        $response = $this->service->delete($budget);
+        
+        return $this->json(
+            $response->data,
+            $response->status,
+            $response->headers
+        );
     }
 
     #[Route('/{id}', name: 'edit', methods: ['POST', 'GET'], requirements: ['id' => '\d+'])]
     public function edit(Budget $budget, Request $request):Response
     {
+        $this->denyAccessUnlessGranted(BudgetVoter::BUDGET_EDIT, $budget);
+        $form = $this->createForm(BudgetType::class, $budget);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->service->save($budget);
+        }
+
         return $this->renderForm('budget/edit.html.twig', compact('form', 'budget'));
     }
 
-    #[Route('/create', name: 'create', methods: ['POST', 'GET'])]
-    public function create(Request $request):Response
+    #[Route('/new', name: 'new', methods: ['POST', 'GET'])]
+    public function newBudget(Request $request):Response
     {
         $budget = new Budget;
         $form = $this->createForm(BudgetType::class, $budget);
@@ -41,13 +57,13 @@ class BudgetController extends AbstractController
             $this->service->save($budget);
         }
 
-        return $this->renderForm('budget/create.html.twig', compact('form', 'budget'));
+        return $this->renderForm('budget/new.html.twig', compact('form', 'budget'));
     }
 
     #[Route('', name: 'index', methods: ['GET'])]
-    public function index():Response
+    public function index(Request $request):Response
     {
-        return $this->render('');
+        return $this->render('budget/index.html.twig', $this->service->index($request));
     }
 
 }

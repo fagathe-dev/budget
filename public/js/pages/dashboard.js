@@ -36,6 +36,7 @@ const displayBudget = (budget = {}, expenses = [], container) => {
     clone.querySelector('[data-budget-category-name]').innerText = budget?.category?.name;
     clone.querySelector('[data-budget-expenses-sum]').innerText = sum(expenses).toFixed(2);
     clone.querySelector('[data-budget-amount]').innerText = budget?.amount;
+    clone.querySelector('[data-budget-edit]').setAttribute('href', APP_BUDGET_EDIT + budget?.id);
     
     return container.appendChild(clone);
 }
