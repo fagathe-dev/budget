@@ -55,6 +55,10 @@ class BudgetController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->service->save($budget);
+
+            return $this->redirectToRoute('app_budget_edit', [
+                'id' => $budget->getId(),
+            ]);
         }
 
         return $this->renderForm('budget/new.html.twig', compact('form', 'budget'));
