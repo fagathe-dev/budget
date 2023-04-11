@@ -34,11 +34,6 @@ class BudgetType extends AbstractType
                 'choice_label' => 'name',
                 'constraints' => [
                     new Assert\Callback([
-                        'callback' => function (mixed $value, ExecutionContextInterface $context) {
-                            if (!$value) {
-                                return;
-                            }
-                            if ($this->repository->hasAlreadyCategory($value) instanceof Budget) {
                         'callback' => function (mixed $value, ExecutionContextInterface $context) use ($builder) {
                             $budget = $this->repository->hasAlreadyCategory($value);
                             if (!$value) {
