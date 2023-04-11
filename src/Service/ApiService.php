@@ -10,7 +10,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -19,8 +18,6 @@ final class ApiService
 {
 
     use ServiceTrait;
-
-    private $session;
 
     public function __construct(
         private CategoryRepository $categoryRepository,
@@ -31,7 +28,6 @@ final class ApiService
         private ValidatorInterface $validator,
         private SerializerInterface $serializer
     ) {
-        $this->session = new Session;
     }
     
     /**
