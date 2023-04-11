@@ -40,8 +40,8 @@ class BudgetController extends AbstractController
         return $this->renderForm('budget/edit.html.twig', compact('form', 'budget'));
     }
 
-    #[Route('/create', name: 'create', methods: ['POST', 'GET'])]
-    public function create(Request $request):Response
+    #[Route('/new', name: 'new', methods: ['POST', 'GET'])]
+    public function newBudget(Request $request):Response
     {
         $budget = new Budget;
         $form = $this->createForm(BudgetType::class, $budget);
@@ -51,13 +51,13 @@ class BudgetController extends AbstractController
             $this->service->save($budget);
         }
 
-        return $this->renderForm('budget/create.html.twig', compact('form', 'budget'));
+        return $this->renderForm('budget/new.html.twig', compact('form', 'budget'));
     }
 
     #[Route('', name: 'index', methods: ['GET'])]
-    public function index():Response
+    public function index(Request $request):Response
     {
-        return $this->render('');
+        return $this->render('budget/index.html.twig', $this->service->index($request));
     }
 
 }
