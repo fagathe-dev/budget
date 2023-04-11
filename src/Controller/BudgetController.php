@@ -20,10 +20,16 @@ class BudgetController extends AbstractController
     ){}
 
     #[Route('/{id}', name: 'delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
-    public function delete(Budget $budget, Request $request):JsonResponse
+    public function delete(Budget $budget):JsonResponse
     {
         $this->denyAccessUnlessGranted(BudgetVoter::BUDGET_EDIT, $budget);
-        return $this->json([]);
+        $response = $this->service->delete($budget);
+        
+        return $this->json(
+            $response->data,
+            $response->status,
+            $response->headers
+        );
     }
 
     #[Route('/{id}', name: 'edit', methods: ['POST', 'GET'], requirements: ['id' => '\d+'])]

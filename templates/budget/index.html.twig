@@ -94,9 +94,9 @@
     <script>
         const deleteCategory = async (e) => {
             e.preventDefault();
-            const consent = confirm('Êtes-vous sûr de supprimer cet utilisateur ?');
+            const consent = confirm('Êtes-vous sûr de supprimer ce budget?');
             if (consent) {
-                const url = e.target.tagName === 'I' ? e.target.closest('a').href : e.target.href;;
+                const url = e.target.tagName === 'I' ? e.target.closest('a').href : e.target.href;
                 try {
                     const response = await fetch(url, {
                         method: 'DELETE',

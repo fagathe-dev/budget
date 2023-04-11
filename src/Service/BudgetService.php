@@ -9,18 +9,26 @@ use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 final class BudgetService
 {
 
     use ServiceTrait;
 
+    /** 
+     * @var Session $session
+    */
+    private $session;
+
     public function __construct(
         private EntityManagerInterface $manager,
         private BudgetRepository $repository, 
         private Security $security,
         private PaginatorInterface $paginator
-    ) {}
+    ) {
+        $this->session = new Session;
+    }
     
     /**
      * save
@@ -35,6 +43,7 @@ final class BudgetService
         }
 
         $this->repository->save($budget, true);
+        $this->session->getFlashBag()->add('info', 'Budget enregistré');
     }
     
     /**
@@ -55,6 +64,14 @@ final class BudgetService
         );
 
         return compact('paginatedBudgets');
+    }
+
+    public function delete(Budget $budget):object
+    {
+        $this->repository->remove($budget, true);
+        $this->session->getFlashBag()->add('warning', 'Budget supprimé');
+
+        return $this->sendNoContent();
     }
 
 }
