@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Entity\Budget;
 use App\Form\BudgetType;
+use App\Security\Voter\BudgetVoter;
 use App\Service\BudgetService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,12 +22,21 @@ class BudgetController extends AbstractController
     #[Route('/{id}', name: 'delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
     public function delete(Budget $budget, Request $request):JsonResponse
     {
+        $this->denyAccessUnlessGranted(BudgetVoter::BUDGET_EDIT, $budget);
         return $this->json([]);
     }
 
     #[Route('/{id}', name: 'edit', methods: ['POST', 'GET'], requirements: ['id' => '\d+'])]
     public function edit(Budget $budget, Request $request):Response
     {
+        $this->denyAccessUnlessGranted(BudgetVoter::BUDGET_EDIT, $budget);
+        $form = $this->createForm(BudgetType::class, $budget);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->service->save($budget);
+        }
+
         return $this->renderForm('budget/edit.html.twig', compact('form', 'budget'));
     }
 
