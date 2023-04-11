@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Expense;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Expense>
@@ -16,8 +18,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ExpenseRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        private ManagerRegistry $registry,
+        private Security $security
+    ) {
         parent::__construct($registry, Expense::class);
     }
 
@@ -39,20 +43,22 @@ class ExpenseRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Expense[] Returns an array of Expense objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('e.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   /**
+    * @return Expense[] Returns an array of Expense objects
+    */
+   public function findUserLatestExpenses(): array
+   {
+        $user = $this->security->getUser();
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.user = :userId')
+            ->andWhere('e.isPaid = :isPaid')
+            ->setParameter('isPaid', false)
+            ->setParameter('userId',  $user instanceof User ? $user->getId() : null)
+            ->orderBy('e.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+   }
 
 //    public function findOneBySomeField($value): ?Expense
 //    {

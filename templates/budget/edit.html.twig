@@ -1,0 +1,15 @@
+{% extends "layouts.html.twig" %}
+
+{% block main %}
+    <h1 class="lead">Éditer le budget <span>#{{ budget.id }}</span></h1>
+    <div class="mt-2 mb-3">
+        {% include "components/flashes.html.twig" %}
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="my-3">
+                {{ form(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

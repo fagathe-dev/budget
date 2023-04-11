@@ -68,3 +68,7 @@ hr {
 .card {
   background-color: var(--vz-white);
 }
+
+.form-group {
+  margin-bottom: 10px;
+}

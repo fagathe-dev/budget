@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Utils\FakerTrait;
 use Faker\Factory;
 use App\Entity\User;
 use Faker\Generator;
@@ -16,6 +17,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+
+    use FakerTrait;
 
     /**
      * @var Generator $faker
@@ -60,24 +63,12 @@ class AppFixtures extends Fixture
             $listCategories[$k] = $category;
         }
 
-        $admin = new User;
-
-        $admin->setEmail($this->faker->email())
-            ->setRoles(['ROLE_ADMIN'])
-            ->setRegisteredAt($this->now)
-            ->setUpdatedAt($this->now)
-            ->setPassword($this->hasher->hashPassword($admin, 'admin'))
-            ->setUsername($this->faker->userName())
-            ->setIsConfirm(true)
-        ;
-
-        $manager->persist($admin);
-
         for ($u=0; $u < random_int(30, 50); $u++) { 
             $user = new User;
+            $userBudgets = $this->randomElements($listCategories);
 
             $user->setEmail($this->faker->email())
-                ->setRoles(['ROLE_USER'])
+                ->setRoles([$u === 0 ? 'ROLE_ADMIN' : 'ROLE_USER'])
                 ->setRegisteredAt($this->now)
                 ->setUpdatedAt($this->now)
                 ->setPassword($this->hasher->hashPassword($user, 'password'))
@@ -85,23 +76,24 @@ class AppFixtures extends Fixture
                 ->setIsConfirm(true)
             ;
 
-            for ($i=0; $i < random_int(3, 6); $i++) { 
+            foreach ($userBudgets as $k => $userBudget) { 
                 $budget = new Budget;
 
                 $budget->setAmount($this->faker->randomNumber(3, false))
-                    ->setCategory($this->randomElement($listCategories));
+                    ->setCategory($userBudget);
 
                 $user->addBudget($budget);
             }
 
-            for ($i=0; $i < random_int(50, 100); $i++) { 
+            for ($i=0; $i < random_int(100, 150); $i++) { 
                 $expense = new Expense;
 
-                $expense->setAmount($this->faker->randomFloat(2, 1, 500))
+                $expense->setAmount($this->faker->randomFloat(2, 5, 500))
                     ->setLabel($this->faker->words(random_int(1, 4), true))
                     ->setCategory($this->randomElement($listCategories))
                     ->setIsPaid($this->randomElement([true, false]))
-                    ->setPaidAt($this->now)
+                    ->setCreatedAt($this->setDateTimeBetween('-4 months'))
+                    ->setPaidAt($this->setDateTimeAfter($expense->getCreatedAt()))
                 ;
 
                 $user->addExpense($expense);
@@ -173,11 +165,4 @@ class AppFixtures extends Fixture
             ],
         ];
     } 
-
-    private function randomElement(array $elements):mixed 
-    {
-        shuffle($elements);
-        
-        return $elements[random_int(0, (count($elements) - 1))];
-    }
 }

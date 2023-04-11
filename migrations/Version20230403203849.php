@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230329152958 extends AbstractMigration
+final class Version20230403203849 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -30,10 +30,11 @@ final class Version20230329152958 extends AbstractMigration
         $this->addSql('CREATE TABLE category (id INT NOT NULL, name VARCHAR(80) NOT NULL, icon VARCHAR(30) DEFAULT NULL, slug VARCHAR(100) DEFAULT NULL, description TEXT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN category.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN category.updated_at IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE expense (id INT NOT NULL, user_id INT DEFAULT NULL, category_id INT DEFAULT NULL, amount DOUBLE PRECISION NOT NULL, label VARCHAR(80) NOT NULL, is_paid BOOLEAN DEFAULT NULL, paid_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE expense (id INT NOT NULL, user_id INT DEFAULT NULL, category_id INT DEFAULT NULL, amount DOUBLE PRECISION NOT NULL, label VARCHAR(80) NOT NULL, is_paid BOOLEAN DEFAULT NULL, paid_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_2D3A8DA6A76ED395 ON expense (user_id)');
         $this->addSql('CREATE INDEX IDX_2D3A8DA612469DE2 ON expense (category_id)');
         $this->addSql('COMMENT ON COLUMN expense.paid_at IS \'(DC2Type:datetime_immutable)\'');
+        $this->addSql('COMMENT ON COLUMN expense.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('CREATE TABLE "user" (id INT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, registered_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, username VARCHAR(80) NOT NULL, image VARCHAR(255) DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, is_confirm BOOLEAN NOT NULL, token VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649E7927C74 ON "user" (email)');
         $this->addSql('COMMENT ON COLUMN "user".registered_at IS \'(DC2Type:datetime_immutable)\'');

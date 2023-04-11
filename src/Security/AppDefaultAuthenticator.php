@@ -24,7 +24,11 @@ class AppDefaultAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
     public const DEFAULT_REDIRECT_PATH = 'app_default';
-    public const ADMIN_REDIRECT_PATH = 'admin_login';
+    public const ADMIN_REDIRECT_PATH = 'admin_index';    
+    
+    /**
+     * @var ?User $user
+     */
     private $user = null;
 
     public function __construct(
@@ -32,7 +36,19 @@ class AppDefaultAuthenticator extends AbstractLoginFormAuthenticator
         private UserRepository $repository,
         private Security $security
     ){}
-
+    
+    /**
+     * authenticate
+     *
+     * @param  mixed $request
+     * @return Passport
+     */    
+    /**
+     * authenticate
+     *
+     * @param  mixed $request
+     * @return Passport
+     */
     public function authenticate(Request $request): Passport
     {
         $email = $request->request->get('email', '');
@@ -56,7 +72,15 @@ class AppDefaultAuthenticator extends AbstractLoginFormAuthenticator
 
         throw new CustomUserMessageAuthenticationException('Identifiants incorrects'); 
     }
-
+    
+    /**
+     * onAuthenticationSuccess
+     *
+     * @param  mixed $request
+     * @param  mixed $token
+     * @param  mixed $firewallName
+     * @return Response
+     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
@@ -70,7 +94,13 @@ class AppDefaultAuthenticator extends AbstractLoginFormAuthenticator
             : self::DEFAULT_REDIRECT_PATH)
         );
     }
-
+    
+    /**
+     * getLoginUrl
+     *
+     * @param  mixed $request
+     * @return string
+     */
     protected function getLoginUrl(Request $request): string
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);

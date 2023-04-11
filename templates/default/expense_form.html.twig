@@ -1,0 +1,46 @@
+<!-- Default Modals -->
+<button 
+    type="button" 
+    class="btn btn-success btn-rounded waves-effect waves-light" 
+    data-bs-toggle="modal" 
+    data-bs-target="#modalExpense"
+    id="modalFormExpense"
+    onclick="initForm();"
+><i class="ri-add-fill"></i></button>
+<div id="modalExpense" class="modal fade" tabindex="-1" aria-labelledby="modalExpenseLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-fullscreen-sm-down">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalExpenseLabel">Ajouter une dépense</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="#" data-action="create" id="expenseForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="label" class="form-label">Libellé</label>
+                        <input type="text" class="form-control" name="label" id="label">
+                    </div>
+                    <div class="form-group">
+                        <label for="amount" class="form-label">Montant</label>
+                        <input data-type-amount type="text" class="form-control" name="amount" id="amount">
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" name="isPaid" id="isPaid">
+                        <label class="form-check-label" for="isPaid">Est payé</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="category" class="form-label">Catégorie</label>
+                        <select class="form-select mb-3" id="category" name="category" aria-label="Ajouter une catégorie">
+                            <option value>Sélectionnez une catégorie ... </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-bs-dismiss="modal" style="display: none;"></button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
