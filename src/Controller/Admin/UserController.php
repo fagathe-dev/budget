@@ -33,7 +33,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->service->save($user);
+            $this->service->create($user);
 
             $this->addFlash('success', 'Utilisateur enregistré.');
             return $this->redirectToRoute('admin_user_index');

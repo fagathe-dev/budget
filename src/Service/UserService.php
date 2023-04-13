@@ -35,7 +35,7 @@ final class UserService
      * @param  mixed $user
      * @return void
      */
-    public function save(User $user):void 
+    public function create(User $user):void 
     {
         $user->getId() !== null ? $user->setUpdatedAt(new DateTimeImmutable) : $user->setRegisteredAt(new DateTimeImmutable);
         $user->setPassword($this->hasher->hashPassword($user, $user->getPassword()))
