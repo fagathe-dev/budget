@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Breadcrumb;
 
 use App\Breadcrumb\Breadcrumb;
@@ -8,7 +8,7 @@ class BreadcrumbGenerator
 
     public function __construct(
         private ?Breadcrumb $breadcrumb = null
-    ){
+    ) {
         $this->generate();
     }
 
