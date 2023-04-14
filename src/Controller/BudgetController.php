@@ -3,8 +3,10 @@ namespace App\Controller;
 
 use App\Entity\Budget;
 use App\Form\BudgetType;
-use App\Security\Voter\BudgetVoter;
+use App\Breadcrumb\Breadcrumb;
 use App\Service\BudgetService;
+use App\Breadcrumb\BreadcrumbItem;
+use App\Security\Voter\BudgetVoter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,6 +37,11 @@ class BudgetController extends AbstractController
     #[Route('/{id}', name: 'edit', methods: ['POST', 'GET'], requirements: ['id' => '\d+'])]
     public function edit(Budget $budget, Request $request):Response
     {
+        $breadcrumb = new Breadcrumb([
+            new BreadcrumbItem('Mes budgets', $this->generateUrl('app_budget_index')),
+            new BreadcrumbItem('Modifier le budget ' . $budget->getCategory()->getName())
+        ]);
+
         $this->denyAccessUnlessGranted(BudgetVoter::BUDGET_EDIT, $budget);
         $form = $this->createForm(BudgetType::class, $budget);
         $form->handleRequest($request);
@@ -43,12 +50,17 @@ class BudgetController extends AbstractController
             $this->service->save($budget);
         }
 
-        return $this->renderForm('budget/edit.html.twig', compact('form', 'budget'));
+        return $this->renderForm('budget/edit.html.twig', compact('form', 'budget', 'breadcrumb'));
     }
 
     #[Route('/new', name: 'new', methods: ['POST', 'GET'])]
     public function newBudget(Request $request):Response
     {
+        $breadcrumb = new Breadcrumb([
+            new BreadcrumbItem('Mes budgets', $this->generateUrl('app_budget_index')),
+            new BreadcrumbItem('Ajouter une categorie')
+        ]);
+
         $budget = new Budget;
         $form = $this->createForm(BudgetType::class, $budget);
         $form->handleRequest($request);
@@ -61,7 +73,7 @@ class BudgetController extends AbstractController
             ]);
         }
 
-        return $this->renderForm('budget/new.html.twig', compact('form', 'budget'));
+        return $this->renderForm('budget/new.html.twig', compact('form', 'budget', 'breadcrumb'));
     }
 
     #[Route('', name: 'index', methods: ['GET'])]

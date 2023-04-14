@@ -2,12 +2,15 @@
 namespace App\Service;
 
 use App\Entity\Category;
-use App\Utils\ServiceTrait;
 use Cocur\Slugify\Slugify;
+use App\Utils\ServiceTrait;
+use App\Breadcrumb\Breadcrumb;
+use App\Breadcrumb\BreadcrumbItem;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class CategoryService 
@@ -21,6 +24,7 @@ final class CategoryService
         private ValidatorInterface $validator,
         private PaginatorInterface $paginator,
         private CategoryRepository $repository, 
+        private UrlGeneratorInterface $router
     ) {
         $this->slugify = new Slugify;
     }
@@ -33,6 +37,11 @@ final class CategoryService
      */
     public function index(Request $request):array 
     {
+
+        $breadcrumb = new Breadcrumb([
+            new BreadcrumbItem('Liste des categories', $this->router->generate('admin_category_index'))
+        ]);
+        
         $data = $this->repository->findAll();
 
         $paginatedCategories = $this->paginator->paginate(
@@ -41,7 +50,7 @@ final class CategoryService
             $request->query->getInt('nbItems', 10) /*limit per page*/
         );
 
-        return compact('paginatedCategories');
+        return compact('paginatedCategories', 'breadcrumb');
     }
     
     /**

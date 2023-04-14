@@ -4,12 +4,15 @@ namespace App\Service;
 use App\Entity\User;
 use App\Entity\Budget;
 use App\Utils\ServiceTrait;
+use App\Breadcrumb\Breadcrumb;
+use App\Breadcrumb\BreadcrumbItem;
 use App\Repository\BudgetRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class BudgetService
 {
@@ -25,7 +28,8 @@ final class BudgetService
         private EntityManagerInterface $manager,
         private BudgetRepository $repository, 
         private Security $security,
-        private PaginatorInterface $paginator
+        private PaginatorInterface $paginator,
+        private UrlGeneratorInterface $router
     ) {
         $this->session = new Session;
     }
@@ -54,6 +58,9 @@ final class BudgetService
      */
     public function index(Request $request):array 
     {
+        $breadcrumb = new Breadcrumb([
+            new BreadcrumbItem('Mes budgets', $this->router->generate('app_budget_index'))
+        ]);
 
         $user = $this->security->getUser();
 
@@ -63,7 +70,7 @@ final class BudgetService
             $request->query->getInt('nbItems', 10) /*limit per page*/
         );
 
-        return compact('paginatedBudgets');
+        return compact('paginatedBudgets', 'breadcrumb');
     }
 
     public function delete(Budget $budget):object
