@@ -52,12 +52,10 @@ class BreadcrumbGenerator
     private function breadcrumbItem(BreadcrumbItem $item, bool $isActive = false): string
     {
         $active = $isActive ? " active\" aria-current=\"page\"" :  "";
-        $link = $item->getLink() ?? '#';
-        return "<li class=\"breadcrumb-item{$active}\">
-            <a href=\"{$link}\">
-                {$item->getName()}
-            </a>
-        </li>";
+        $html = "<li class=\"breadcrumb-item{$active}\">";
+        $html .= $isActive || is_null($item->getLink()) ? $item->getName() : "<a href=\"{$item->getLink()}\">{$item->getName()}</a>";
+        
+        return $html . "</li>";
     }
     
     /**
@@ -81,9 +79,8 @@ class BreadcrumbGenerator
      */
     public function generate(): ?string
     {
-        $html = $this->breadcrumbStart();
-        $lastKey = $this->lastKey($this->breadcrumb->getItems());
         $path = $this->request->getPathInfo();
+        $html = $this->breadcrumbStart();
 
         if ($this->breadcrumb->getHomePage()) {
             if (str_starts_with($path, '/admin')) {
@@ -92,8 +89,10 @@ class BreadcrumbGenerator
                 $route = '/';
             }
 
-            $html .= $this->breadcrumbItem(new BreadcrumbItem('Accueil', $route), $lastKey === 0);
+            $this->breadcrumb->addItem(new BreadcrumbItem('Accueil', $route));
         }   
+        $lastKey = $this->lastKey($this->breadcrumb->getItems());
+
         foreach ($this->breadcrumb->getItems() as $key => $item) {
             $html .= $this->breadcrumbItem($item, $key === $lastKey);
         }

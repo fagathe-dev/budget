@@ -6,7 +6,7 @@ final class BreadcrumbItem
 
     public function __construct(
         private string $name = '',
-        private string $link = ''
+        private ?string $link = null
     ) {
     }
 
@@ -16,7 +16,7 @@ final class BreadcrumbItem
      * 
      * @return string
      */
-    public function getLink():string
+    public function getLink():?string
     {
         return $this->link;
     }
@@ -24,7 +24,7 @@ final class BreadcrumbItem
     /**
      * Get the value of name
      * 
-     * @return string
+     * @return null|string
      */
     public function getName():string
     {

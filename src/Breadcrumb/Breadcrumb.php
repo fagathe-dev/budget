@@ -28,6 +28,13 @@ class Breadcrumb
         return $this->items;
     }
 
+    public function addItem(BreadcrumbItem $item):self
+    {
+        $this->items = array_merge([$item], $this->items);
+
+        return $this;
+    }
+
     /**
      * Get the value of homePage
      * 

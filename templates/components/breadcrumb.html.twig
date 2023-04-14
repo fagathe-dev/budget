@@ -1,5 +1,3 @@
 {% if breadcrumb is defined %}
-    <nav class="breadcrumb mt-3">
-        breadcrumb
-    </nav>
+    {{ generate_breadcrumb(breadcrumb) }}
 {% endif %}
