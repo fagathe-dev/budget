@@ -2,7 +2,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Category;
+use App\Breadcrumb\Breadcrumb;
 use App\Service\CategoryService;
+use App\Breadcrumb\BreadcrumbItem;
 use App\Form\Admin\EditCategoryType;
 use App\Form\Admin\CreateCategoryType;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +30,12 @@ class CategoryController extends AbstractController
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function newCategory(Request $request):Response 
     {
+
+        $breadcrumb = new Breadcrumb([
+            new BreadcrumbItem('Liste des categories', $this->generateUrl('admin_category_index')),
+            new BreadcrumbItem('Ajouter une categorie')
+        ]);
+
         $category = new Category;
         $form = $this->createForm(CreateCategoryType::class, $category);
         $form->handleRequest($request);
@@ -39,12 +47,18 @@ class CategoryController extends AbstractController
             return $this->redirectToRoute('admin_category_index');
         }
 
-        return $this->renderForm('admin/category/new.html.twig', compact('form', 'category'));
+        return $this->renderForm('admin/category/new.html.twig', compact('form', 'category', 'breadcrumb'));
     }
     
     #[Route('/{id}', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function editCategory(Category $category, Request $request):Response 
     {
+
+        $breadcrumb = new Breadcrumb([
+            new BreadcrumbItem('Liste des categories', $this->generateUrl('admin_category_index')),
+            new BreadcrumbItem('Modifier la categorie ' . $category->getName()),
+        ]);
+
         $form = $this->createForm(EditCategoryType::class, $category);
         $form->handleRequest($request);
 
@@ -57,7 +71,7 @@ class CategoryController extends AbstractController
             ]);
         }
 
-        return $this->renderForm('admin/category/edit.html.twig', compact('form', 'category'));
+        return $this->renderForm('admin/category/edit.html.twig', compact('form', 'category', 'breadcrumb'));
     }
 
     #[Route('/{id}', name: 'delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]

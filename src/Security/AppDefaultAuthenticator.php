@@ -24,8 +24,8 @@ class AppDefaultAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
     public const DEFAULT_REDIRECT_PATH = 'app_default';
-    public const ADMIN_REDIRECT_PATH = 'admin_index';    
-    
+    public const ADMIN_REDIRECT_PATH = 'admin_default';
+
     /**
      * @var ?User $user
      */
@@ -35,14 +35,15 @@ class AppDefaultAuthenticator extends AbstractLoginFormAuthenticator
         private UrlGeneratorInterface $urlGenerator,
         private UserRepository $repository,
         private Security $security
-    ){}
-    
+    ) {
+    }
+
     /**
      * authenticate
      *
      * @param  mixed $request
      * @return Passport
-     */    
+     */
     /**
      * authenticate
      *
@@ -53,7 +54,7 @@ class AppDefaultAuthenticator extends AbstractLoginFormAuthenticator
     {
         $email = $request->request->get('email', '');
         $this->user = $this->repository->findOneBy(['email' => $email]);
-        
+
         $request->getSession()->set(Security::LAST_USERNAME, $email);
 
         if ($this->user instanceof User) {
@@ -66,13 +67,13 @@ class AppDefaultAuthenticator extends AbstractLoginFormAuthenticator
                     ]
                 );
             } else {
-                throw new CustomUserMessageAuthenticationException(''); 
+                throw new CustomUserMessageAuthenticationException('');
             }
         }
 
-        throw new CustomUserMessageAuthenticationException('Identifiants incorrects'); 
+        throw new CustomUserMessageAuthenticationException('Identifiants incorrects');
     }
-    
+
     /**
      * onAuthenticationSuccess
      *
@@ -89,12 +90,12 @@ class AppDefaultAuthenticator extends AbstractLoginFormAuthenticator
 
         // For example:
         return new RedirectResponse(
-            $this->urlGenerator->generate($this->security->isGranted("ROLE_ADMIN") 
-            ? self::ADMIN_REDIRECT_PATH 
-            : self::DEFAULT_REDIRECT_PATH)
+            $this->urlGenerator->generate($this->security->isGranted("ROLE_ADMIN")
+                ? self::ADMIN_REDIRECT_PATH
+                : self::DEFAULT_REDIRECT_PATH)
         );
     }
-    
+
     /**
      * getLoginUrl
      *

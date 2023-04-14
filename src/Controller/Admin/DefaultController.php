@@ -13,7 +13,7 @@ class DefaultController extends AbstractController
         private AdminService $service
     ){}
 
-    #[Route('', name: 'index', methods: ['GET'])]
+    #[Route('', name: 'default', methods: ['GET'])]
     public function index():Response 
     {
         return $this->render('admin/index.html.twig', $this->service->getData());
