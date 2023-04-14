@@ -3,7 +3,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Service\UserService;
+use App\Breadcrumb\Breadcrumb;
 use App\Form\Admin\EditUserType;
+use App\Breadcrumb\BreadcrumbItem;
 use App\Form\Admin\CreateUserType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,6 +30,11 @@ class UserController extends AbstractController
     #[Route('/new', name: 'new', methods: ['POST', 'GET'])]
     public function newUser(Request $request):Response 
     {
+        $breadcrumb = new Breadcrumb([
+            new BreadcrumbItem('Liste des utilisateurs', $this->generateUrl('admin_user_index')),
+            new BreadcrumbItem('Ajouter un utilisateur')
+        ]);
+        
         $user = new User;
         $form = $this->createForm(CreateUserType::class, $user);
         $form->handleRequest($request);
@@ -39,13 +46,17 @@ class UserController extends AbstractController
             return $this->redirectToRoute('admin_user_index');
         }
 
-        return $this->renderForm('admin/user/new.html.twig', compact('form', 'user'));
+        return $this->renderForm('admin/user/new.html.twig', compact('form', 'user', 'breadcrumb'));
     } 
 
 
     #[Route('/{id}', name: 'edit', methods: ['POST', 'GET'], requirements: ['id' => '\d+']) ]
     public function editUser(User $user, Request $request):Response
     {
+        $breadcrumb = new Breadcrumb([
+            new BreadcrumbItem('Liste des utilisateurs', $this->generateUrl('admin_user_index'))
+        ]);
+
         $form = $this->createForm(EditUserType::class, $user);
         $form->handleRequest($request);
 
@@ -58,7 +69,7 @@ class UserController extends AbstractController
             ]);
         }
 
-        return $this->renderForm('admin/user/edit.html.twig', compact('user', 'form'));
+        return $this->renderForm('admin/user/edit.html.twig', compact('user', 'form', 'breadcrumb'));
     }
 
     #[Route('/{id}', name: 'delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
