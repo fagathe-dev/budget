@@ -65,10 +65,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $expenses;
 
     #[ORM\Column]
-    private ?bool $isConfirm = null;
+    private ?bool $confirm = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $token = null;
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $firstname = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $lastname = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserToken::class)]
+    private Collection $tokens;
 
     public const ROLES = [
         'Super Administrateur' => 'ROLE_SUPER_ADMIN',
@@ -80,6 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->budgets = new ArrayCollection();
         $this->expenses = new ArrayCollection();
+        $this->tokens = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -260,26 +267,75 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isConfirm(): ?bool
+    public function getConfirm(): ?bool
     {
-        return $this->isConfirm;
+        return $this->confirm;
     }
 
-    public function setIsConfirm(bool $isConfirm): self
+    public function toggleConfirm(): self
     {
-        $this->isConfirm = $isConfirm;
+        $this->confirm = !$this->confirm;
 
         return $this;
     }
 
-    public function getToken(): ?string
+    public function setConfirm(bool $confirm): self
     {
-        return $this->token;
+        $this->confirm = $confirm;
+
+        return $this;
     }
 
-    public function setToken(?string $token): self
+    public function getFirstname(): ?string
     {
-        $this->token = $token;
+        return $this->firstname;
+    }
+
+    public function setFirstname(?string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(?string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserToken>
+     */
+    public function getTokens(): Collection
+    {
+        return $this->tokens;
+    }
+
+    public function addToken(UserToken $token): self
+    {
+        if (!$this->tokens->contains($token)) {
+            $this->tokens->add($token);
+            $token->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeToken(UserToken $token): self
+    {
+        if ($this->tokens->removeElement($token)) {
+            // set the owning side to null (unless already changed)
+            if ($token->getUser() === $this) {
+                $token->setUser(null);
+            }
+        }
 
         return $this;
     }
