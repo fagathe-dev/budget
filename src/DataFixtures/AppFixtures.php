@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Utils\FakerTrait;
 use Faker\Factory;
 use App\Entity\User;
 use Faker\Generator;
@@ -10,7 +9,9 @@ use App\Entity\Budget;
 use DateTimeImmutable;
 use App\Entity\Expense;
 use App\Entity\Category;
+use App\Utils\FakerTrait;
 use Cocur\Slugify\Slugify;
+use App\Utils\Data\CategoryData;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -48,7 +49,7 @@ class AppFixtures extends Fixture
         $listCategories = [];
         $listUsers = [];
 
-        foreach ($this->categories() as $k => $c) {
+        foreach (CategoryData::getData() as $k => $c) {
             $category = new Category;
 
             $category->setCreatedAt($this->now)
@@ -107,64 +108,4 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    private function categories():array 
-    {
-        return [
-            [
-                'name' => 'Logement',
-                'icon' => 'ri-community-line',
-                'description' => 'Loyers, travaux, ...',
-            ],
-            [
-                'name' => 'Achats & shopping',
-                'icon' => 'ri-shopping-bag-line',
-                'description' => 'Shopping, Dépenses du quotidien, ...',
-            ],
-            [
-                'name' => 'Abonnements',
-                'icon' => 'ri-calendar-event-line',
-                'description' => 'Les abonnements téléphone, netflix, ...',
-            ],
-            [
-                'name' => 'Voiture',
-                'icon' => 'ri-car-line',
-                'description' => 'Loyers, travaux, ...',
-            ],
-            [
-                'name' => 'Transports',
-                'icon' => 'ri-bus-line',
-                'description' => null,
-            ],
-            [
-                'name' => 'Économies',
-                'icon' => 'ri-coins-line',
-                'description' => null,
-            ],
-            [
-                'name' => 'Santé',
-                'icon' => 'ri-hospital-line',
-                'description' => null,
-            ],
-            [
-                'name' => 'Impôts, taxes, frais',
-                'icon' => 'ri-bank-line',
-                'description' => null,
-            ],
-            [
-                'name' => 'Vacances & loisirs',
-                'icon' => 'ri-suitcase-line',
-                'description' => 'Sorties',
-            ],
-            [
-                'name' => 'Énergies',
-                'icon' => 'ri-water-flash-line',
-                'description' => null,
-            ],
-            [
-                'name' => 'Autres',
-                'icon' => 'ri-calculator-line',
-                'description' => null,
-            ],
-        ];
-    } 
 }
