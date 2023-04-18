@@ -58,17 +58,13 @@ class AppDefaultAuthenticator extends AbstractLoginFormAuthenticator
         $request->getSession()->set(Security::LAST_USERNAME, $email);
 
         if ($this->user instanceof User) {
-            if ($this->user->getConfirm() === true) {
-                return new Passport(
-                    new UserBadge($email),
-                    new PasswordCredentials($request->request->get('password', '')),
-                    [
-                        new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
-                    ]
-                );
-            } else {
-                throw new CustomUserMessageAuthenticationException('');
-            }
+            return new Passport(
+                new UserBadge($email),
+                new PasswordCredentials($request->request->get('password', '')),
+                [
+                    new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
+                ]
+            );
         }
 
         throw new CustomUserMessageAuthenticationException('Identifiants incorrects');
