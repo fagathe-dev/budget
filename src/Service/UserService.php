@@ -44,7 +44,7 @@ final class UserService
     {
         $user->getId() !== null ? $user->setUpdatedAt(new DateTimeImmutable) : $user->setRegisteredAt(new DateTimeImmutable);
         $user->setPassword($this->hasher->hashPassword($user, $user->getPassword()))
-            ->setIsConfirm(false);
+            ->setConfirm($user->getConfirm() ?? false);
 
         $this->repository->save($user, true);
     }

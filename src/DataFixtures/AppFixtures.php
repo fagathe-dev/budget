@@ -73,7 +73,9 @@ class AppFixtures extends Fixture
                 ->setUpdatedAt($this->now)
                 ->setPassword($this->hasher->hashPassword($user, 'password'))
                 ->setUsername($this->faker->userName())
-                ->setIsConfirm(true)
+                ->setConfirm(true)
+                ->setFirstname($this->faker->firstName())
+                ->setLastname($this->faker->lastName())
             ;
 
             foreach ($userBudgets as $k => $userBudget) { 
