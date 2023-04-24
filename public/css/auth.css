@@ -1,0 +1,30 @@
+.auth-wrapper {
+  display: flex;
+  flex-flow: column nowrap;
+  min-height: 100vh;
+  height: auto;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.bg-overlay {
+  background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.3) 33.33%,
+      rgba(0, 0, 09, 0.4) 50%,
+      rgba(0, 0, 0, 0.5) 100%
+    ),
+    url(/img/bg-auth.jpg);
+  background-attachment: fixed;
+  background-position: right;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-clip: content-box;
+  background-origin: content-box;
+  opacity: 1;
+}
+
+.auth-wrapper .card {
+    background-color: var(--vz-white);
+}

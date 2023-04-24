@@ -1,0 +1,54 @@
+<header class="header">
+    <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
+        <div class="container-fluid">
+            <a href="{{ path('app_default') }}" class="navbar-brand">$hine</a>
+            <button 
+                class="navbar-toggler" 
+                type="button" 
+                data-bs-toggle="collapse" 
+                data-bs-target="#navbarNavMenu" 
+                aria-controls="navbarNavMenu" 
+                aria-expanded="false" 
+                aria-label="Toggle navigation"
+            ><span class="navbar-toggler-icon"></span></button>
+        
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNavMenu">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ app.user.username }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{{ path('app_budget_index') }}">
+                                    <i class="ri-bar-chart-2-line"></i>
+                                    Mes budgets
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="ri-account-box-line"></i>
+                                    Mon compte
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ path('admin_default') }}">
+                                    <i class="ri-settings-2-line"></i>
+                                    Administration
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{{ path('app_logout') }}">
+                                    <i class="ri-logout-circle-r-line"></i>
+                                    Déconnexion
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

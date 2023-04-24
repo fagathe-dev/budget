@@ -1,0 +1,74 @@
+.wrapper {
+  overflow: auto hidden;
+  width: 100%;
+  height: auto;
+  min-height: 100vh;
+  display: flex;
+  flex-flow: column nowrap;
+  -ms-flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.wrapper .header {
+  min-height: 6.5vh;
+  height: auto;
+  width: 100%;
+}
+
+.wrapper .footer {
+  width: 100%;
+  left: 0 !important;
+  position: unset;
+}
+
+.navbar-toggler {
+  outline: none;
+  border: none;
+}
+
+.navbar-toggler-icon {
+  font-size: 18px;
+  color: var(--bs-white);
+}
+
+.wrapper .main-content {
+  min-height: calc(100vh - 50px);
+  height: auto;
+  width: 100%;
+  margin-left: 0 !important;
+}
+
+.wrapper .dropdown-menu.show {
+  top: 110%;
+  left: -75px;
+  z-index: 5;
+  background-color: var(--vz-white);
+}
+
+.wrapper .dropdown-item {
+  display: inline-flex;
+  vertical-align: middle;
+  vertical-align: -webkit-baseline-middle;
+  transition: all 350ms ease-in-out;
+}
+
+.wrapper .dropdown-item:hover {
+  background-color: var(--vz-light);
+}
+
+.wrapper .dropdown-item i {
+  margin-right: .3rem;
+}
+
+hr {
+  opacity: .8;
+}
+
+.card {
+  background-color: var(--vz-white);
+}
+
+.form-group {
+  margin-bottom: 10px;
+}

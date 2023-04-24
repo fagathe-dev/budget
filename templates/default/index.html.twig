@@ -1,0 +1,24 @@
+{% extends "layouts.html.twig" %}
+
+{% block main %}
+    {% include "default/budgets.html.twig" %}
+    {% include "default/expenses.html.twig" %}
+    {% include "default/expense_form.html.twig" %}
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/pages/dashboard.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        const API_BASE_URL = window.location?.origin;
+        const API_DATA_URL = window.location?.origin + "{{ path('api_dashboard_index') }}";
+        const API_CREATE_EXPENSE = "{{ url('api_dashboard_create_expense') }}";
+        const API_EDIT_EXPENSE = "{{ url('api_dashboard_create_expense') }}/";
+        const API_DELETE_EXPENSE = "{{ url('api_dashboard_create_expense') }}/";
+        const APP_BUDGET_EDIT = "{{ url('app_budget_index') }}/";
+    </script>
+    <script src="{{ asset('js/form.js') }}"></script>
+    <script src="{{ asset('js/pages/dashboard.js') }}"></script>
+{% endblock %}

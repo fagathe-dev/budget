@@ -1,0 +1,113 @@
+{% extends "layouts.html.twig" %}
+
+{% block main %}
+
+    {# Breadcrumb container #}
+    <div class="mt-2 mb-3">
+        {% include "components/flashes.html.twig" %}
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card" id="budgetList">
+                <div class="card-header border-bottom-dashed">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-sm">
+                            <div>
+                                <h5 class="card-title mb-0">Liste des budgets</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm-auto">
+                            <div class="d-flex flex-wrap align-items-start gap-2">
+                                <a 
+                                    href="{{ path('app_budget_new') }}" 
+                                    class="btn btn-success">
+                                    <i class="ri-add-line align-bottom me-1"></i>
+                                    Ajouter un budget
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-responsive table-card mb-1 w-100">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Montant</th>
+                                <th scope="col">Catégorie</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for budget in paginatedBudgets %}
+                                <tr class="align-middle">
+                                    <th scope="row">{{ budget.id }}</th>
+                                    <td>{{ budget.amount }}</td>
+                                    <td>
+                                        <i class="{{ budget.category.icon }}"></i>
+                                        {{ budget.category.name }}
+                                    </td>
+                                    <td>
+                                        <a 
+                                            href="{{ path('app_budget_edit', {
+                                                id: budget.id
+                                            }) }}" 
+                                            class="btn btn-ghost-info waves-effect waves-light btn-icon"
+                                            title="Modifier la catégorie de {{ budget.category.name }}"
+                                        >
+                                            <i class="ri-pencil-line"></i>
+                                        </a>
+                                        <a 
+                                            href="{{ path('app_budget_delete', {
+                                                id: budget.id
+                                            }) }}" 
+                                            class="btn btn-ghost-danger waves-effect waves-light btn-icon"
+                                            title="Supprimer la catégorie de {{ budget.category.name }}"
+                                            onclick="deleteCategory(event);"
+                                        >
+                                            <i class="ri-delete-bin-5-line"></i>
+                                        </a>
+                                    </td>
+                                </tr>                                
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between">
+                        <div class="result-infos">
+                            <span class="fw-bold">{{ paginatedBudgets.items|length }}</span>
+                            sur 
+                            {{ paginatedBudgets.getTotalItemCount }}
+                        </div>
+                        <div class="pagination-wrap hstack">
+                            {{ knp_pagination_render(paginatedBudgets) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        const deleteCategory = async (e) => {
+            e.preventDefault();
+            const consent = confirm('Êtes-vous sûr de supprimer ce budget?');
+            if (consent) {
+                const url = e.target.tagName === 'I' ? e.target.closest('a').href : e.target.href;
+                try {
+                    const response = await fetch(url, {
+                        method: 'DELETE',
+                    });
+                    if (response.ok && response.status === 204) {
+                        window.location.reload();
+                    }
+                } catch (e) {
+                    console.error(e)
+                }
+            }
+        }
+    </script>
+{% endblock %}
