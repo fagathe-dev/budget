@@ -41,3 +41,11 @@
         </div>
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    {% if success == true %}
+        <script>
+            setTimeout(() => window.location = '{{ url('app_login') }}', 5000);
+        </script>
+    {% endif %}
+{% endblock %}
