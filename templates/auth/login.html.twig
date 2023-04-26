@@ -20,6 +20,7 @@
             <div class="card mt-4">
                 <div class="card-body p-4">
                     <form method="post">
+                        {% include "components/flashes.html.twig" %}
                         {% if error %}
                             <div class="alert alert-danger alert-dismissible shadow fade show" role="alert">
                                 <small>{{ error.messageKey|trans(error.messageData, 'security') }}</small>
@@ -49,7 +50,7 @@
                             </div>
                             <div class="mb-3">
                                 <div class="float-end">
-                                    <a href="a#" class="text-muted">Mot de passe oublié?</a>
+                                    <a href="{{ path('app_forgot_password_index') }}" class="text-muted">Mot de passe oublié?</a>
                                 </div>
                                 <label for="password" class="form-label">Mot de passe</label>
                                 <div class="position-relative auth-pass-inputgroup mb-3">
@@ -87,6 +88,15 @@
                             </button>
                         </div>
                     </form>
+                    <div class="border"></div>
+                    <div class="mt-4 text-center">
+                        <p class="mb-0">
+                            Vous n'avez pas encore un compte ? 
+                            <a href="{{ path('app_registration_index') }}" class="fw-semibold text-primary text-decoration-underline"> 
+                                Inscrivez-vous ! 
+                            </a> 
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

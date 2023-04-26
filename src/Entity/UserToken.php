@@ -28,6 +28,10 @@ class UserToken
     #[ORM\Column(length: 40, nullable: true)]
     private ?string $action = null;
 
+    public const RESET_PASSWORD_TOKEN = 'RESET_PASSWORD_TOKEN';
+    // public const RESET_PASSWORD_TOKEN = 'RESET_PASSWORD_TOKEN';
+    // public const RESET_PASSWORD_TOKEN = 'RESET_PASSWORD_TOKEN';
+
     public function getId(): ?int
     {
         return $this->id;

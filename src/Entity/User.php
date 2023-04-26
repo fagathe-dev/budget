@@ -73,7 +73,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $lastname = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserToken::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserToken::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $tokens;
 
     public const ROLES = [
