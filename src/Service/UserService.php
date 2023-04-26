@@ -97,8 +97,8 @@ final class UserService
             $token = new UserToken;
             $token->setAction(UserToken::RESET_PASSWORD_TOKEN)
                 ->setToken($this->generateToken())
-                ->setCreatedAt(new DateTimeImmutable)
-                ->setExpiredAt((new DateTimeImmutable)->modify('+2 days'))
+                ->setCreatedAt($this->now())
+                ->setExpiredAt($this->now()->modify('+2 days'))
             ;
 
             $user->addToken($token);
