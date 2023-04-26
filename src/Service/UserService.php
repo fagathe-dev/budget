@@ -2,14 +2,13 @@
 namespace App\Service;
 
 use App\Entity\User;
+use App\Entity\UserToken;
 use DateTimeImmutable;
 use Cocur\Slugify\Slugify;
 use App\Utils\ServiceTrait;
 use App\Breadcrumb\Breadcrumb;
 use App\Breadcrumb\BreadcrumbItem;
 use App\Repository\UserRepository;
-use App\Breadcrumb\BreadcrumbGenerator;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
 use Knp\Component\Pager\PaginatorInterface;
@@ -28,7 +27,6 @@ final class UserService
     private $session;
 
     public function __construct(
-        private EntityManagerInterface $manager,
         private ValidatorInterface $validator,
         private PaginatorInterface $paginator,
         private UserRepository $repository,
@@ -53,6 +51,7 @@ final class UserService
 
         try {
             $this->repository->save($user, true);
+            // TODO: Envoi de mail confirm création de compte
         } catch (ORMException $e) {
             $this->session->getFlashBag()->add('danger', $e->getMessage());
         } catch (Exception $e) {
@@ -85,9 +84,35 @@ final class UserService
 
     public function delete(User $user): object
     {
-        $this->manager->remove($user);
-        $this->manager->flush();
+        $this->repository->remove($user, true);
 
         return $this->sendNoContent();
     }
+
+    public function sendCreateForgotPasswordMail(?string $userEmail = null):bool 
+    {
+        $user = $this->repository->findOneBy(['email' => $userEmail]);
+
+        if ($user instanceof User) {
+            $token = new UserToken;
+            $token->setAction('')
+                ->setToken('')
+                ->setCreatedAt(new DateTimeImmutable)
+                ->setExpiredAt(new DateTimeImmutable)
+            ;
+
+            $user->addToken($token);
+            try {
+                $this->repository->save($user, true);
+                // TODO: Envoi de mail avec token reset password
+            } catch (Exception $e) {
+                $this->session->getFlashBag()->add('danger', $e->getMessage());
+                return false;
+            }
+        }
+
+        $this->session->getFlashBag()->add('success', 'Votre demande a été pris en compte 👍');
+        return true;
+    }
+
 }

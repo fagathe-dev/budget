@@ -26,13 +26,14 @@ class RegistrationController extends AbstractController
         $success = false;
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->service->save($user->setRoles(['ROLE_ADMIN']));
+            if ($this->service->save($user->setRoles(['ROLE_ADMIN']))) {
+                $this->addFlash('success', 'Vous vous êtes avec succès 🚀');
 
-            $this->addFlash('success', 'Vous vous êtes avec succès 🚀');
-            $success = true;
+                return $this->redirectToRoute('app_login');
+            }
         }
 
-        return $this->renderForm('auth/register/index.html.twig', compact('form', 'success'));
+        return $this->renderForm('auth/register/index.html.twig', compact('form'));
     }
 
 }
