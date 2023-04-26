@@ -1,20 +1,23 @@
 <?php
 namespace App\Service;
 
-use App\Breadcrumb\Breadcrumb;
-use App\Breadcrumb\BreadcrumbGenerator;
-use App\Breadcrumb\BreadcrumbItem;
 use App\Entity\User;
 use DateTimeImmutable;
 use Cocur\Slugify\Slugify;
 use App\Utils\ServiceTrait;
+use App\Breadcrumb\Breadcrumb;
+use App\Breadcrumb\BreadcrumbItem;
 use App\Repository\UserRepository;
+use App\Breadcrumb\BreadcrumbGenerator;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
+use Exception;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class UserService
 {
@@ -22,6 +25,7 @@ final class UserService
     use ServiceTrait;
 
     private $slugify;
+    private $session;
 
     public function __construct(
         private EntityManagerInterface $manager,
@@ -32,6 +36,7 @@ final class UserService
         private UrlGeneratorInterface $router
     ) {
         $this->slugify = new Slugify;
+        $this->session = new Session;
     }
 
     /**
@@ -46,7 +51,13 @@ final class UserService
         $user->setPassword($this->hasher->hashPassword($user, $user->getPassword()))
             ->setConfirm($user->getConfirm() ?? false);
 
-        $this->repository->save($user, true);
+        try {
+            $this->repository->save($user, true);
+        } catch (ORMException $e) {
+            $this->session->getFlashBag()->add('danger', $e->getMessage());
+        } catch (Exception $e) {
+            $this->session->getFlashBag()->add('danger', $e->getMessage());
+        }
     }
 
     /**
