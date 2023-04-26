@@ -9,6 +9,7 @@ use App\Utils\ServiceTrait;
 use App\Breadcrumb\Breadcrumb;
 use App\Breadcrumb\BreadcrumbItem;
 use App\Repository\UserRepository;
+use App\Repository\UserTokenRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
 use Knp\Component\Pager\PaginatorInterface;
@@ -31,7 +32,8 @@ final class UserService
         private PaginatorInterface $paginator,
         private UserRepository $repository,
         private UserPasswordHasherInterface $hasher,
-        private UrlGeneratorInterface $router
+        private UrlGeneratorInterface $router,
+        private UserTokenRepository $userTokenRepository
     ) {
         $this->slugify = new Slugify;
         $this->session = new Session;
@@ -81,14 +83,26 @@ final class UserService
 
         return compact('paginatedUsers', 'breadcrumb');
     }
-
+    
+    /**
+     * delete
+     *
+     * @param  mixed $user
+     * @return object
+     */
     public function delete(User $user): object
     {
         $this->repository->remove($user, true);
 
         return $this->sendNoContent();
     }
-
+    
+    /**
+     * sendCreateForgotPasswordMail
+     *
+     * @param  mixed $userEmail
+     * @return bool
+     */
     public function sendCreateForgotPasswordMail(?string $userEmail = null):bool 
     {
         $user = $this->repository->findOneBy(['email' => $userEmail]);
@@ -115,4 +129,45 @@ final class UserService
         return true;
     }
 
+    public function resetPassword(UserToken $token, ?string $password):bool 
+    {   
+        $user = $token->getUser();
+        $user->setPassword(
+            $this->hasher->hashPassword($user, $password)
+        );
+        
+        try {
+            $user->removeToken($token);
+            $this->repository->save($user, true);
+            // TODO: Envoi de mail confirmation modification de mot de passe
+        } catch (Exception $e) {
+            $this->session->getFlashBag()->add('danger', $e->getMessage());
+            return false;
+        }
+
+        $this->session->getFlashBag()->add('success', 'Votre mot de passe a bien été modifié 🚀');
+        return true;
+    }
+    
+    /**
+     * getUserToken
+     *
+     * @param  mixed $token
+     * @return UserToken
+     */
+    public function getUserToken(?string $token):?UserToken 
+    {
+        return $this->userTokenRepository->findOneBy(['token' => $token]);
+    }
+    
+    /**
+     * getUserToken
+     *
+     * @param  mixed $token
+     * @return UserToken
+     */
+    public function checkUserToken(UserToken $token):bool 
+    {
+        return $this->isDatePast($token->getExpiredAt());
+    }
 }

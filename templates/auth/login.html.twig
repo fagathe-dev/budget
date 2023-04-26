@@ -20,6 +20,7 @@
             <div class="card mt-4">
                 <div class="card-body p-4">
                     <form method="post">
+                        {% include "components/flashes.html.twig" %}
                         {% if error %}
                             <div class="alert alert-danger alert-dismissible shadow fade show" role="alert">
                                 <small>{{ error.messageKey|trans(error.messageData, 'security') }}</small>
