@@ -1,20 +1,17 @@
 <div class="card">
-    <div class="card-header">
-        <h6 class="card-title mb-0">Modifier mon adresse e-mail</h6>
-    </div>
-    <div class="card-body">
-        <form action="#" method="PUT" onsubmit="event.preventDefault()">
-            <div class="form-group">
-                <label for="newEmail" class="form-label">Mon nouvel adresse e-mail</label>
-                <input 
-                    type="email" 
-                    name="newEmail" 
-                    id="newEmail" 
-                    placeholder="Mon nouvel adresse e-mail" 
-                    class="form-control"
-                >
-            </div>
-            <button type="submit" class="btn btn-success">Changer d'adresse e-mail</button>
-        </form>
-    </div>
-</div>
+    {% if user.confirm == false %}
+        <div class="card-header">
+            <h6 class="card-title mb-0">Vérifier mon adresse e-mail</h6>
+        </div>
+        <div class="card-body">
+            <button type="submit" class="btn btn-success">Vérifier mon adresse e-mail</button>
+        </div>
+    {% else %}
+        <div class="card-header">
+            <h6 class="card-title mb-0">Modifier mon adresse e-mail</h6>
+        </div>
+        <div class="card-body">
+            {{ form(form) }}
+        </div>
+    {% endif %}
+</div> 

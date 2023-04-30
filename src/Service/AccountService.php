@@ -3,6 +3,7 @@ namespace App\Service;
 
 use Exception;
 use App\Entity\User;
+use App\Entity\UserToken;
 use App\Utils\ServiceTrait;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Exception\ORMException;
@@ -20,7 +21,12 @@ final class AccountService
     /**
      * @var Session $session
      */
-    private $session;
+    private $session; 
+
+    /**
+     * @var User
+     */
+    private $user;
 
     public function __construct(
         private UserRepository $repository,
@@ -31,6 +37,7 @@ final class AccountService
         private UserPasswordHasherInterface $hasher
     ) {
         $this->session = new Session;
+        $this->user = $this->security->getUser();
     }
     
     /**
@@ -43,18 +50,21 @@ final class AccountService
     {
         $this->userService->save($user);
     } 
-
-    public function updatePassword(?string $password)
+    
+    /**
+     * updatePassword
+     *
+     * @param  mixed $password
+     * @return void
+     */
+    public function updatePassword(?string $password):void
     {
-        $user = $this->security->getUser();
-
-        $user->setPassword($this->hasher->hashPassword($user, $password))
+        $this->user->setPassword($this->hasher->hashPassword($this->user, $password))
             ->setUpdatedAt($this->now())
         ;
 
-        $this->repository->save($user, true);
         try {
-            $this->repository->save($user, true);
+            $this->repository->save($this->user, true);
             // TODO: Envoi de mail confirm mot de passe mis à jour
             $this->session->getFlashBag()->add('info', 'Mot de passe mis à jour 🚀');
         } catch (ORMException $e) {
@@ -62,6 +72,28 @@ final class AccountService
         } catch (Exception $e) {
             $this->session->getFlashBag()->add('danger', $e->getMessage());
         }
+    }
+
+    public function emailVerify(?string $email):void
+    {
+        $token = new UserToken;
+        $token->setAction(UserToken::USER_EMAIL_VERIFICATION)
+            ->setCreatedAt($this->now())
+            ->setExpiredAt($this->now()->modify('+24 hours'))
+            ->setData(compact('email'))
+            ->setToken($this->generateToken())
+        ;
+
+        try {
+            $this->repository->save($this->user->addToken($token), true);
+            // TODO: Envoi de mail verification nouvelle adresse e-mail
+            $this->session->getFlashBag()->add('info', 'Votre demande a bien été pris en compte.');
+        } catch (ORMException $e) {
+            $this->session->getFlashBag()->add('danger', $e->getMessage());
+        } catch (Exception $e) {
+            $this->session->getFlashBag()->add('danger', $e->getMessage());
+        }
+        
     }
 
 }

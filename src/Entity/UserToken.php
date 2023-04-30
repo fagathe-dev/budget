@@ -28,7 +28,11 @@ class UserToken
     #[ORM\Column(length: 40, nullable: true)]
     private ?string $action = null;
 
+    #[ORM\Column(nullable: true)]
+    private array $data = [];
+
     public const RESET_PASSWORD_TOKEN = 'RESET_PASSWORD_TOKEN';
+    public const USER_EMAIL_VERIFICATION = 'USER_EMAIL_VERIFICATION';
     // public const RESET_PASSWORD_TOKEN = 'RESET_PASSWORD_TOKEN';
     // public const RESET_PASSWORD_TOKEN = 'RESET_PASSWORD_TOKEN';
 
@@ -93,6 +97,18 @@ class UserToken
     public function setAction(?string $action): self
     {
         $this->action = $action;
+
+        return $this;
+    }
+
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    public function setData(?array $data): self
+    {
+        $this->data = $data;
 
         return $this;
     }

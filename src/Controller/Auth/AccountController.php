@@ -5,6 +5,7 @@ use App\Breadcrumb\Breadcrumb;
 use App\Form\Auth\AccountType;
 use App\Service\AccountService;
 use App\Breadcrumb\BreadcrumbItem;
+use App\Form\Auth\ChangeEmailType;
 use App\Form\Auth\ChangePasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,6 +48,21 @@ class AccountController extends AbstractController
             return $this->redirectToRoute('app_account_index');
         }
 
-        return $this->renderForm('auth/account/index.html.twig', compact('formInfo', 'formPassword', 'user', 'breadcrumb'));
+        $formEmail = $this->createForm(ChangeEmailType::class);
+        $formEmail->handleRequest($request);
+
+        if($formEmail->isSubmitted() && $formEmail->isValid()) {
+            $this->service->emailVerify($formEmail->get('email')->getData());
+
+            return $this->redirectToRoute('app_account_index');
+        }
+
+        return $this->renderForm('auth/account/index.html.twig', compact(
+            'formInfo', 
+            'formPassword', 
+            'formEmail', 
+            'user', 
+            'breadcrumb'
+        ));
     }
 }
