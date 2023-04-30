@@ -5,6 +5,7 @@ use App\Breadcrumb\Breadcrumb;
 use App\Form\Auth\AccountType;
 use App\Service\AccountService;
 use App\Breadcrumb\BreadcrumbItem;
+use App\Form\Auth\ChangePasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,8 +34,19 @@ class AccountController extends AbstractController
 
         if($formInfo->isSubmitted() && $formInfo->isValid()) {
             $this->service->save($user);
+
+            return $this->redirectToRoute('app_account_index');
         }
 
-        return $this->renderForm('auth/account/index.html.twig', compact('formInfo', 'user', 'breadcrumb'));
+        $formPassword = $this->createForm(ChangePasswordType::class);
+        $formPassword->handleRequest($request);
+
+        if($formPassword->isSubmitted() && $formPassword->isValid()) {
+            $this->service->updatePassword($formPassword->get('password')->getData());
+
+            return $this->redirectToRoute('app_account_index');
+        }
+
+        return $this->renderForm('auth/account/index.html.twig', compact('formInfo', 'formPassword', 'user', 'breadcrumb'));
     }
 }

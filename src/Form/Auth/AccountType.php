@@ -35,6 +35,14 @@ class AccountType extends AbstractType
                     'placeholder' => 'Nom de famille',
                 ],
             ])
+            ->add('email', TextType::class, [
+                'label' => 'Adresse e-mail',
+                'required' => false,
+                'disabled' => true,
+                'attr' => [
+                    'placeholder' => 'Nom de famille',
+                ],
+            ])
             ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer',
                 'attr' => [

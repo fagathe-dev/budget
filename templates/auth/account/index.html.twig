@@ -33,7 +33,7 @@
             <div class="col-12 col-lg-8">
                 {% include "auth/account/forms/infos.html.twig" with {form: formInfo} %}
                 {% include "auth/account/forms/email.html.twig" %}
-                {% include "auth/account/forms/password.html.twig" %}
+                {% include "auth/account/forms/password.html.twig" with {form: formPassword} %}
                 <div class="card">
                     <div class="card-header" style="background-color: rgba(240, 101, 72, .85);">
                         <h6 class="card-title mb-0 text-white">Supprimer mon compte</h6>
