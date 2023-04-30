@@ -6,7 +6,7 @@ use App\Breadcrumb\BreadcrumbGenerator;
 use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
 
-class BreadcrumbExtension extends AbstractExtension
+final class BreadcrumbExtension extends AbstractExtension
 {
     public function getFunctions()
     {
@@ -14,7 +14,13 @@ class BreadcrumbExtension extends AbstractExtension
             new TwigFunction('generate_breadcrumb', [$this, 'generateBreadcrumb'], ['is_safe' => ['html']]),
         ];
     }
-
+    
+    /**
+     * generateBreadcrumb
+     *
+     * @param  mixed $breadcrumb
+     * @return string
+     */
     public function generateBreadcrumb(?Breadcrumb $breadcrumb):string
     {
         return (new BreadcrumbGenerator($breadcrumb))->generate();
