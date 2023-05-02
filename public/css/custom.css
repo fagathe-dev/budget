@@ -76,7 +76,7 @@ hr {
 .account {
   min-height: 200px;
   border-radius: 6px;
-  box-shadow: 0 3px 15px rgba(30,32,37,.06);
+  box-shadow: 0 3px 15px rgba(30, 32, 37, 0.06);
   margin-bottom: 20px;
   background-color: var(--vz-white);
 }
@@ -95,18 +95,53 @@ hr {
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
-  height: 100px;
-  width: 100px;
+  height: 6rem;
+  width: 6rem;
   color: var(--vz-white);
   border-radius: 60px;
   overflow-x: hidden;
+}
+
+#page-account .avatar-overlay {
+  border-radius: 60px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  top: -150px;
+  left: 0;
+  background: rgba(0, 0, 0, calc(2 / 3));
+  z-index: 9999;
+  transition: 500ms ease-in-out;
 }
 
 #page-account .card-title {
   margin-bottom: 0;
 }
 
-#page-account .card-header, #page-account .card-footer {
+#page-account .card-header,
+#page-account .card-footer {
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+#page-account .link {
+  color: var(--vz-white);
+  display: auto;
+  text-transform: none;
+  text-decoration: underline;
+}
+
+#page-account .link:hover {
+  cursor: pointer;
+}
+
+#page-account .avatar-lg {
+  overflow: hidden;
+}
+
+#page-account .avatar-lg:hover .avatar-overlay {
+  top: 0;
 }

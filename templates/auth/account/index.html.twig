@@ -12,12 +12,19 @@
                         <h6 class="card-title mb-0">Mon profil</h6>
                     </div>
                     <div class="card-body p-4 text-center">
-                        <div class="mx-auto avatar-lg mb-3">
+                        <div class="mx-auto avatar-lg mb-3 position-relative">
                             {% if user.image %}
                                 <img src="" class="img-fluid rounded-circle" alt="Ma photo de profil" srcset="">
                             {% else %}
                                 <div class="avatar-text">{{ user.username|slice(0,1) }}</div>
                             {% endif %}
+                            <div class="position-absolute avatar-overlay">
+                                <span
+                                    class="link"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalProfilePhoto"
+                                >modifier</span>
+                            </div>
                         </div>
                         <h5 class="card-title mb-1"><em>@{{ user.username }}</em></h5>
                         <p class="text-muted mb-0">{{ user.roles|join(', ') }}</p>
@@ -45,7 +52,8 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div> 
+    {% include "auth/account/forms/profile-photo.html.twig" %}   
 {% endblock %}
 
 {% block javascripts %}{% endblock %}
