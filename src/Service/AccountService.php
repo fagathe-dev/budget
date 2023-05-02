@@ -6,12 +6,14 @@ use App\Entity\User;
 use App\Entity\UserToken;
 use App\Utils\ServiceTrait;
 use App\Repository\UserRepository;
+use App\Repository\UserTokenRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class AccountService
 {
@@ -34,7 +36,9 @@ final class AccountService
         private SerializerInterface $serializer,
         private UserService $userService,
         private Security $security,
-        private UserPasswordHasherInterface $hasher
+        private UserPasswordHasherInterface $hasher,
+        private UserTokenRepository $userTokenRepository,
+        private UrlGeneratorInterface $router
     ) {
         $this->session = new Session;
         $this->user = $this->security->getUser();
@@ -73,7 +77,13 @@ final class AccountService
             $this->session->getFlashBag()->add('danger', $e->getMessage());
         }
     }
-
+    
+    /**
+     * emailVerify
+     *
+     * @param  mixed $email
+     * @return void
+     */
     public function emailVerify(?string $email):void
     {
         $token = new UserToken;
@@ -95,5 +105,44 @@ final class AccountService
         }
         
     }
+    
+    /**
+     * verifyEmail
+     *
+     * @param  mixed $token
+     * @return void
+     */
+    public function verifyEmail(?string $token):void
+    {
+        $userToken = $this->userTokenRepository->findOneBy(['token' => $token]);
+        $link =  '<br/> <span>Rendez-vous sur <a href=\"' . $this->router->generate('app_account_index') . '\">votre  compte</a> pour générer un nouveau lien</span>';
+        $err_msg = 'Ce lien est invalide ! '. $link;
+        
+        if ($userToken instanceof UserToken) {
+            $user = $userToken->getUser();
+            $email = $userToken->getData()['email'] ?? '';
 
+            if ($this->userService->checkUserToken($userToken) === false) {
+                $this->session->getFlashBag()->add('danger', 'Ce lien est expiré !' . $link);
+                return;
+            }
+
+            if ($email === '' || $user === null) {
+                $this->session->getFlashBag()->add('danger', $err_msg);
+                return;
+            }
+
+            $user->setEmail($email)
+                ->setUpdatedAt($this->now())
+                ->removeToken($userToken)
+            ;
+            
+            $this->repository->save($user, true);
+
+            $this->session->getFlashBag()->add('success', 'Votre changement d\'adresse e-mail a bien été pris en compte ✅');
+            return;
+        }
+
+        $this->session->getFlashBag()->add('danger', $err_msg);
+    }
 }

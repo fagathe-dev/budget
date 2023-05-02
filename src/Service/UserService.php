@@ -172,6 +172,6 @@ final class UserService
      */
     public function checkUserToken(UserToken $token):bool 
     {
-        return $this->isDatePast($token->getExpiredAt());
+        return $token->getExpiredAt() !== null && $this->isDatePast($token->getExpiredAt());
     }
 }

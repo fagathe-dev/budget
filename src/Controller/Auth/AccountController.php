@@ -65,4 +65,13 @@ class AccountController extends AbstractController
             'breadcrumb'
         ));
     }
+
+    #[Route('/verification-email', name: 'verify_email', methods: ['get'])]
+    public function verifyEmail(Request $request):Response 
+    {
+        $this->service->verifyEmail($request->query->get('token'));
+
+        return $this->redirectToRoute('app_default');
+    }
+
 }
