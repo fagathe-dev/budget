@@ -1,13 +1,20 @@
 class ImagePreviewer {
   constructor(e, options = {}, form = null) {
     this.options = options;
+    this.form = form;
     this.imageContainer = document.querySelector("img.previewer-image");
     this.previewImage(e);
   }
 
   enableSubmit() {
-    if (this.hasErrors()) {
-      form?.querySelector('[submit]').setAttribute('disabled', true);
+    if (this.form !== null) {
+      return this.hasErrors()
+        ? this.form
+            .querySelector('[type="submit"]')
+            ?.setAttribute("disabled", true)
+        : this.form
+            .querySelector('[type="submit"]')
+            ?.removeAttribute("disabled");
     }
   }
 
@@ -18,11 +25,12 @@ class ImagePreviewer {
   checkImage(image) {
     const extension = image.name.split(".").pop();
     if (!this.getTrustedImageTypes().includes(extension)) {
-      this.errors = { 
-        ...this.errors, 
-        type: "Cette image n'est pas valide !" 
+      this.errors = {
+        ...this.errors,
+        type: "Cette image n'est pas valide !",
       };
     }
+
     this.checkImageSize(image);
   }
 
@@ -30,8 +38,9 @@ class ImagePreviewer {
     const image = e.target.files[0];
     const node = e.target;
     this.errors = new Object();
-    console.debug(this.errors)
+
     this.checkImage(image);
+
     this.displayErrorsMsg(node);
 
     return this.preview(image, node);
@@ -53,11 +62,9 @@ class ImagePreviewer {
     return Object.keys(this.errors).length > 0;
   }
 
-  displayErrorsMsg(node) {
+  getErrorContainer(node) {
     let target = document.querySelector("#errorsContainer"),
-      container,
-      content = "";
-
+      container;
     if (target !== null && target !== undefined) {
       container = target;
     } else if (
@@ -74,12 +81,20 @@ class ImagePreviewer {
     } else if (target !== null && target !== undefined) {
       container = target;
     }
-    console.info(this.errors)
+
+    return container;
+  }
+
+  displayErrorsMsg(node) {
+    let content = "",
+      container = this.getErrorContainer(node);
+
     if (this.hasErrors() === false) {
       container.innerHTML = "";
+      this.enableSubmit();
     }
     if (this.imageContainer !== undefined && this.imageContainer !== null) {
-      this.imageContainer.remove();
+      this.imageContainer.style.display = "none";
     }
 
     for (const key in this.errors) {
@@ -87,7 +102,6 @@ class ImagePreviewer {
         content += `<p class="previewer-error item text-danger">${key} : ${this.errors[key]}</p>`;
       }
     }
-    console.warn({ content });
 
     return (container.innerHTML = content);
   }
@@ -104,6 +118,10 @@ class ImagePreviewer {
   }
 
   preview(image, node) {
+    if (this.hasErrors()) {
+      return;
+    }
+
     let imageContainer = this.imageContainer;
     if (this.imageContainer === undefined || this.imageContainer === null) {
       imageContainer = document.createElement("img");
@@ -115,9 +133,12 @@ class ImagePreviewer {
       }
       this.imageContainer = imageContainer;
     }
+    this.imageContainer.style.display = "block";
 
-    this.imageContainer.src = URL.createObjectURL(image);
-    this.imageContainer.srcset = URL.createObjectURL(image);
-    return (node.onload = () => URL.revokeObjectURL(this.imageContainer.src)); // Free memory
+    let urlImage = URL.createObjectURL(image);
+    this.imageContainer.src = urlImage;
+    this.imageContainer.srcset = urlImage;
+    node.onload = () => URL.revokeObjectURL(this.imageContainer.src); // Free memory
+    return;
   }
 }
