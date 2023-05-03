@@ -56,4 +56,27 @@
     {% include "auth/account/forms/profile-photo.html.twig" %}   
 {% endblock %}
 
-{% block javascripts %}{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/ImagePreviewer.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/ImagePreviewer.js') }}"></script>
+    <script>
+        const imageUpload = document.getElementById('imageUpload');
+
+        imageUpload.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                return new ImagePreviewer(e, {
+                    maxFileSize: 10,
+                    errorsContainer: '#errorsContainer',
+                    title: 'Prévisualiser votre photo de profil' 
+                });
+            }
+
+            return (document.querySelector("#error").innerText = 'Aucune image n\'a été chargée !');
+        });
+
+        const handleChangeImageProfile = (event) => event.preventDefault(); 
+    </script>
+{% endblock %}
