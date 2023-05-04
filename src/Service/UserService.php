@@ -53,7 +53,12 @@ final class UserService
 
         try {
             $this->repository->save($user, true);
-            // TODO: Envoi de mail confirm création de compte
+
+            if ($user->getUpdatedAt() === null) {
+                // TODO: Envoi de mail confirm création de compte
+            }
+            $this->session->getFlashBag()->add('info', 'Utilisateur enregistré.');
+
         } catch (ORMException $e) {
             $this->session->getFlashBag()->add('danger', $e->getMessage());
         } catch (Exception $e) {
@@ -168,6 +173,6 @@ final class UserService
      */
     public function checkUserToken(UserToken $token):bool 
     {
-        return $this->isDatePast($token->getExpiredAt());
+        return $token->getExpiredAt() !== null && $this->isDatePast($token->getExpiredAt());
     }
 }

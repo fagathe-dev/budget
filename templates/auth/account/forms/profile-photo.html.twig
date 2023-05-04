@@ -1,0 +1,30 @@
+<div class="modal" tabindex="-1" id="modalProfilePhoto" aria-labelledby="modalProfilePhotoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form 
+            enctype='multipart/form-data' 
+            action="{{ url('app_account_upload_image') }}" 
+            method="post" 
+            onSubmit="handleChangeImageProfile(event);" 
+            name="imageUploadForm"
+        >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalProfilePhotoLabel">Changer votre photo de profil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="imageUpload"></label>
+                    <div class="form-group">
+                        <img src="" alt="" srcset="" class="previewer-image" style="display: none;">
+                        <input type="file" name="imageUpload" class="form-control" id="imageUpload">
+                    </div>
+                    <div id="errorsContainer"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary" disabled>Enregistrer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -42,7 +42,6 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->service->save($user);
 
-            $this->addFlash('success', 'Utilisateur enregistré.');
             return $this->redirectToRoute('admin_user_index');
         }
 
@@ -63,7 +62,6 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->service->save($user);
 
-            $this->addFlash('info', 'Utilisateur enregistré.');
             return $this->redirectToRoute('admin_user_edit', [
                 'id' => $user->getId()
             ]);

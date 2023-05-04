@@ -23,12 +23,17 @@ class RegistrationType extends AbstractType
                 'label' => 'Nom d\'utilisateur',
                 'required' => false,
                 'attr' => [
-                    'autofocus' => true ,
+                    'autofocus' => true,
+                    'placeholder' => 'Nom d\'utilisateur',
                 ],
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Adresse e-mail',
-                'required' => false
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Adresse e-mail',
+                ],
+
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,

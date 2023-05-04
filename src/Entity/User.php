@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -34,9 +35,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank(message: 'L\'adresse e-mail est obligatoire !')]
+    #[Groups(['api_upload'])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(['api_upload'])]
     private array $roles = [];
 
     /**
@@ -50,9 +53,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 80)]
     #[Assert\NotBlank(message: 'Le nom d\'utilisateur est obligatoire !')]
+    #[Groups(['api_upload'])]
     private ?string $username = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['api_upload'])]
     private ?string $image = null;
 
     #[ORM\Column(nullable: true)]

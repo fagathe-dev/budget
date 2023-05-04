@@ -1,0 +1,73 @@
+{% extends "layouts.html.twig" %}
+
+{% block main %}
+    <div id="page-account">
+        <div class="row">
+            <div class="col-12">
+                {% include "components/flashes.html.twig" %}
+            </div>
+            <div class="col-12 col-lg-4 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">Mon profil</h6>
+                    </div>
+                    <div class="card-body p-4 text-center">
+                        <div class="mx-auto avatar-lg mb-3 position-relative">
+                            {% if user.image %}
+                                <img 
+                                    title=""
+                                    alt="Ma photo de profil" 
+                                    id="imageProfile"
+                                    class="img-fluid" 
+                                    src="{{ asset(user.image) }}" 
+                                    srcset="{{ asset(user.image) }}"
+                                >
+                            {% else %}
+                                <div class="avatar-text">{{ user.username|slice(0,1) }}</div>
+                            {% endif %}
+                            <div class="position-absolute avatar-overlay">
+                                <span
+                                    class="link"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalProfilePhoto"
+                                >modifier</span>
+                            </div>
+                        </div>
+                        <h5 class="card-title mb-1"><em>@{{ user.username }}</em></h5>
+                        <p class="text-muted mb-0">{{ user.roles|join(', ') }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Membre depuis {{ user.registeredAt|since }}</small>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <a href="{{ path('app_logout') }}" class="btn btn-danger">Se déconnecter</a>
+                </div>
+            </div>
+            <div class="col-12 col-lg-8">
+                {% include "auth/account/forms/infos.html.twig" with {form: formInfo} %}
+                {% include "auth/account/forms/password.html.twig" with {form: formPassword} %}
+                {% include "auth/account/forms/email.html.twig" with {form: formEmail} %}
+                <div class="card">
+                    <div class="card-header" style="background-color: rgba(240, 101, 72, .85);">
+                        <h6 class="card-title mb-0 text-white">Supprimer mon compte</h6>
+                    </div>
+                    <div class="card-body bg-soft-danger">
+                        <small class="d-block lead text-danger mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum maiores vel nesciunt iure! Ipsa tempore quasi saepe accusantium iure adipisci repellat blanditiis impedit voluptate doloremque!</small>
+                        <button type="submit" class="btn btn-danger">Supprimer mon compte</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+    {% include "auth/account/forms/profile-photo.html.twig" %}   
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/ImagePreviewer.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/ImagePreviewer.js') }}"></script>
+    <script src="{{ asset('js/pages/account.js') }}"></script>
+{% endblock %}

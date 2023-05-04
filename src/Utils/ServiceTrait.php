@@ -150,6 +150,31 @@ trait ServiceTrait
         );
     }
 
+    /**
+     * @param array $violations
+     * @param array $headers
+     *
+     * @return object|null
+     */
+    public function sendCustomViolations(array $violations, array $headers = []): ?object
+    {
+
+        return $this->sendJson(
+            [
+                'title' => 'Validation failed !',
+                'violations' => $violations,
+            ],
+            Response::HTTP_BAD_REQUEST,
+            $headers
+        );
+    }
+    
+    /**
+     * filterViolations
+     *
+     * @param  mixed $violations
+     * @return array
+     */
     public function filterViolations(ConstraintViolationList $violations): array
     {
         $errors = [];
