@@ -53,10 +53,12 @@ final class UserService
 
         try {
             $this->repository->save($user, true);
+
             if ($user->getUpdatedAt() === null) {
                 // TODO: Envoi de mail confirm création de compte
             }
             $this->session->getFlashBag()->add('info', 'Utilisateur enregistré.');
+
         } catch (ORMException $e) {
             $this->session->getFlashBag()->add('danger', $e->getMessage());
         } catch (Exception $e) {

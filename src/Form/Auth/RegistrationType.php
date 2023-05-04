@@ -33,6 +33,7 @@ class RegistrationType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Adresse e-mail',
                 ],
+
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,

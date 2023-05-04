@@ -28,13 +28,12 @@ class UserToken
     #[ORM\Column(length: 40, nullable: true)]
     private ?string $action = null;
 
+
     #[ORM\Column(nullable: true)]
     private array $data = [];
 
     public const RESET_PASSWORD_TOKEN = 'RESET_PASSWORD_TOKEN';
     public const USER_EMAIL_VERIFICATION = 'USER_EMAIL_VERIFICATION';
-    // public const RESET_PASSWORD_TOKEN = 'RESET_PASSWORD_TOKEN';
-    // public const RESET_PASSWORD_TOKEN = 'RESET_PASSWORD_TOKEN';
 
     public function getId(): ?int
     {
