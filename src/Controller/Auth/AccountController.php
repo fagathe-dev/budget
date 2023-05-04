@@ -10,6 +10,7 @@ use App\Form\Auth\ChangePasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/mon-compte', name: 'app_account_')]
@@ -72,6 +73,21 @@ class AccountController extends AbstractController
         $this->service->verifyEmail($request->query->get('token'));
 
         return $this->redirectToRoute('app_default');
+    }
+
+    #[Route('/uploadImage', name: 'upload_image', methods: ['POST'])]
+    public function uploadImage(Request $request):JsonResponse 
+    {
+        $response = $this->service->uploadImage($request);
+        
+        return $this->json(
+            $response->data,
+            $response->status,
+            $response->headers,
+            [
+                'groups' => ['api_upload'],
+            ]
+        );
     }
 
 }

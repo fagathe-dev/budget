@@ -6,7 +6,7 @@
             <div class="col-12">
                 {% include "components/flashes.html.twig" %}
             </div>
-            <div class="col-12 col-lg-4">
+            <div class="col-12 col-lg-4 mb-3">
                 <div class="card">
                     <div class="card-header">
                         <h6 class="card-title mb-0">Mon profil</h6>
@@ -62,25 +62,5 @@
 
 {% block javascripts %}
     <script src="{{ asset('js/ImagePreviewer.js') }}"></script>
-    <script>
-        const imageUpload = document.getElementById('imageUpload');
-
-        imageUpload.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                return new ImagePreviewer(
-                    e, 
-                    {
-                    maxFileSize: 10,
-                    errorsContainer: '#errorsContainer',
-                    title: 'Prévisualiser votre photo de profil' 
-                    },
-                    document.querySelector('[name="imageUploadForm"]')    
-                );
-            }
-
-            // return (document.querySelector("#error").innerText = 'Aucune image n\'a été chargée !');
-        });
-
-        const handleChangeImageProfile = (event) => event.preventDefault(); 
-    </script>
+    <script src="{{ asset('js/pages/account.js') }}"></script>
 {% endblock %}

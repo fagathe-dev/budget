@@ -8,6 +8,8 @@ use App\Utils\ServiceTrait;
 use App\Repository\UserRepository;
 use App\Repository\UserTokenRepository;
 use Doctrine\ORM\Exception\ORMException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -38,7 +40,8 @@ final class AccountService
         private Security $security,
         private UserPasswordHasherInterface $hasher,
         private UserTokenRepository $userTokenRepository,
-        private UrlGeneratorInterface $router
+        private UrlGeneratorInterface $router,
+        private UploadService $uploadService
     ) {
         $this->session = new Session;
         $this->user = $this->security->getUser();
@@ -144,5 +147,20 @@ final class AccountService
         }
 
         $this->session->getFlashBag()->add('danger', $err_msg);
+    }
+
+    public function uploadImage(Request $request):object
+    {
+        $user = $this->user;
+        $uploadedImage = $request->files->get('imageUpload');
+
+        if ($uploadedImage instanceof UploadedFile) {
+            dd($this->uploadService->upload($uploadedImage, null));
+            return $this->sendJson(compact('user'));
+        }
+        
+        return $this->sendCustomViolations([
+            'image' => 'Aucune image n\'a été chargée !'
+        ]);
     }
 }
