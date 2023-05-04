@@ -163,7 +163,7 @@ final class AccountService
         if ($uploadedImage instanceof UploadedFile) {
             $res = $this->uploadService->upload($uploadedImage, null);
 
-            if ($res['success'] === 'ko') {
+            if ($res['success'] === false) {
                 return $this->sendCustomViolations($res['violations']);
             }
 

@@ -58,7 +58,7 @@ final class UploadService
             $uploadsErrors['size'] = 'Ce fichier est trop volumineux !';
         }
         if (count($uploadsErrors) > 0) {
-            return (object) ['success' => false, 'violations' => $uploadsErrors];
+            return ['success' => false, 'violations' => $uploadsErrors];
         }
 
         $dir = $this->getUploadedDir();

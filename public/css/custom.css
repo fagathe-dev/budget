@@ -98,12 +98,11 @@ hr {
   height: 6rem;
   width: 6rem;
   color: var(--vz-white);
-  border-radius: 60px;
   overflow-x: hidden;
+  box-shadow: 0 3px 15px rgba(30, 32, 37, 0.06);
 }
 
 #page-account .avatar-overlay {
-  border-radius: 60px;
   height: 100%;
   width: 100%;
   display: flex;
@@ -120,7 +119,7 @@ hr {
 #imageProfile {
   width: 100px;
   height: 100px;
-  border-radius: 60px;
+  box-shadow: 0 3px 15px rgba(30, 32, 37, 0.06);
 }
 
 #page-account .card-title {

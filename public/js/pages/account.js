@@ -1,5 +1,31 @@
 const imageUpload = document.getElementById("imageUpload");
 
+const displayErrors = (errors = {}, form = null, containerSelector = null) => {
+  let container;
+  if (containerSelector !== null) {
+    container = form?.querySelector(containerSelector);
+  } else {
+    container = document.createElement("div");
+    container.id = "errorContainer";
+    container.classList = "text-danger";
+    form
+      .querySelector('input[type="file"]')
+      .insertAdjacentElement("afterend", container);
+  }
+
+  container.innerHTML = "";
+
+  for (const key in errors) {
+    if (errors.hasOwnProperty(key)) {
+      const err = document.createElement("p");
+      err.classList = "text-danger";
+      err.innerHTML = `${key}: ${errors[key]}`;
+      container.insertAdjacentElement("beforeend", err);
+    }
+  }
+  return;
+};
+
 imageUpload.addEventListener("change", (e) => {
   if (e.target.files.length > 0) {
     return new ImagePreviewer(
@@ -23,9 +49,7 @@ const handleChangeImageProfile = async (e) => {
   const url = form.action;
   const method = form.method;
   const formData = new FormData(form);
-  const headers = {
-    // "Content-Type": "multipart/form-data;charset=utf-8; boundary=" + Math.random().toString().slice(0,2),
-  };
+  const headers = {};
 
   const res = await fetch(url, {
     method,
@@ -33,14 +57,16 @@ const handleChangeImageProfile = async (e) => {
     body: formData,
   });
 
-  //   try {
-  //     if (res.ok) {
-  //       if (res.status === 201) {
-  //       }
-  //     }
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-
-  // return form.querySelector('[data-bs-dismiss="modal"]').click();
+  try {
+    const data = await res.json();
+    if (res.ok) {
+      if (res.status === 200) {
+        return (window.location = window.location.href);
+      }
+      form.querySelector('[data-bs-dismiss="modal"]').click();
+    }
+    return displayErrors(data?.violations, form);
+  } catch (e) {
+    console.error(e);
+  }
 };
