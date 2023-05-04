@@ -54,7 +54,6 @@ final class UserService
         try {
             $this->repository->save($user, true);
             if ($user->getUpdatedAt() === null) {
-                dd('ici');
                 // TODO: Envoi de mail confirm création de compte
             }
             $this->session->getFlashBag()->add('info', 'Utilisateur enregistré.');
