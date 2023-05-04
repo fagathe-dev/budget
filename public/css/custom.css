@@ -110,11 +110,17 @@ hr {
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
-  top: 0;
+  top: -150px;
   left: 0;
   background: rgba(0, 0, 0, calc(2 / 3));
   z-index: 10;
   transition: 500ms ease-in-out;
+}
+
+#imageProfile {
+  width: 100px;
+  height: 100px;
+  border-radius: 60px;
 }
 
 #page-account .card-title {

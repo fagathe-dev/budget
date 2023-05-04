@@ -14,7 +14,14 @@
                     <div class="card-body p-4 text-center">
                         <div class="mx-auto avatar-lg mb-3 position-relative">
                             {% if user.image %}
-                                <img src="" class="img-fluid rounded-circle" alt="Ma photo de profil" srcset="">
+                                <img 
+                                    title=""
+                                    alt="Ma photo de profil" 
+                                    id="imageProfile"
+                                    class="img-fluid" 
+                                    src="{{ asset(user.image) }}" 
+                                    srcset="{{ asset(user.image) }}"
+                                >
                             {% else %}
                                 <div class="avatar-text">{{ user.username|slice(0,1) }}</div>
                             {% endif %}

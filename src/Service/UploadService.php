@@ -58,7 +58,7 @@ final class UploadService
             $uploadsErrors['size'] = 'Ce fichier est trop volumineux !';
         }
         if (count($uploadsErrors) > 0) {
-            return (object) ['status' => 'ko', 'violations' => $uploadsErrors];
+            return (object) ['success' => false, 'violations' => $uploadsErrors];
         }
 
         $dir = $this->getUploadedDir();
@@ -72,9 +72,9 @@ final class UploadService
                 $fileName
             );
 
-            return ['status' => 'ok', 'path' => UPLOAD_DIRECTORY . PROFILE_IMAGE_DIRECTORY . $fileName];
+            return ['success' => true, 'path' => UPLOAD_DIRECTORY . PROFILE_IMAGE_DIRECTORY . $fileName];
         } catch (Exception $e) {
-            return ['status' => 'ok', 'violations' => ['system' => 'Une erreur est survenue lors de l\'enregistrement du fichier !']];
+            return ['success' => false, 'violations' => ['system' => 'Une erreur est survenue lors de l\'enregistrement du fichier !']];
         }
     }
     

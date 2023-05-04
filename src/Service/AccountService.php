@@ -148,14 +148,33 @@ final class AccountService
 
         $this->session->getFlashBag()->add('danger', $err_msg);
     }
-
+    
+    /**
+     * uploadImage
+     *
+     * @param  mixed $request
+     * @return object
+     */
     public function uploadImage(Request $request):object
     {
         $user = $this->user;
         $uploadedImage = $request->files->get('imageUpload');
 
         if ($uploadedImage instanceof UploadedFile) {
-            dd($this->uploadService->upload($uploadedImage, null));
+            $res = $this->uploadService->upload($uploadedImage, null);
+
+            if ($res['success'] === 'ko') {
+                return $this->sendCustomViolations($res['violations']);
+            }
+
+            if ($user->getImage() !== null) {
+                $this->uploadService->remove($user->getImage());
+            }
+            $user->setImage($res['path'])
+                ->setUpdatedAt($this->now())
+            ;
+
+            $this->repository->save($user, true);
             return $this->sendJson(compact('user'));
         }
         
