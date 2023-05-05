@@ -12,7 +12,7 @@ class WelcomeMail extends AbstractMailer
     {
         $this->send(
             (new TemplatedEmail)
-                ->from(AbstractMailer::DEFAULT_SENDER)
+                ->from(DEFAULT_EMAIL_SENDER)
                 ->to($user->getEmail())
                 ->subject('Xpense: Confirmation de votre compte')
                 ->htmlTemplate('emails/layout.html.twig')
