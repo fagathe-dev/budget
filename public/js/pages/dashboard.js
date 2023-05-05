@@ -1,7 +1,16 @@
 const store = (data = {}) => {
-  console.log(typeof data.paid);
+  // console.log(typeof data.paid);
+  let paid = [];
+  if (!Array.isArray(data?.paid)) {
+    for (const el in data?.paid) {
+      paid = [...paid, data?.paid[el]];
+    }
+    data.paid = paid;
+    // console.debug(data);
+  }
   return window.localStorage.setItem("data", JSON.stringify(data));
-}
+};
+
 const storeData = () => JSON.parse(window.localStorage.getItem("data"));
 const expenseForm = document.getElementById("expenseForm");
 
