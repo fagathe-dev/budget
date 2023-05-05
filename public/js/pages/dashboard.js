@@ -1,5 +1,7 @@
-const store = (data = {}) =>
-  window.localStorage.setItem("data", JSON.stringify(data));
+const store = (data = {}) => {
+  console.log(typeof data.paid);
+  return window.localStorage.setItem("data", JSON.stringify(data));
+}
 const storeData = () => JSON.parse(window.localStorage.getItem("data"));
 const expenseForm = document.getElementById("expenseForm");
 
