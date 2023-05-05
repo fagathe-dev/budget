@@ -64,7 +64,7 @@ class CreateAdminCommand extends Command
             ->setConfirm(true)
         ;
         
-        $this->service->save($user);
+        $this->service->create($user);
         $io->success('A new admin user has been created ! 🚀');
 
         return Command::SUCCESS;

@@ -26,7 +26,7 @@ class RegistrationController extends AbstractController
         $success = false;
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($this->service->save($user->setRoles(['ROLE_ADMIN']))) {
+            if ($this->service->create($user->setRoles(['ROLE_ADMIN']))) {
                 $this->addFlash('success', 'Vous vous êtes avec succès 🚀');
 
                 return $this->redirectToRoute('app_login');

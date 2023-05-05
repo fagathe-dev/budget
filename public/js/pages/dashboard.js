@@ -21,6 +21,21 @@ const sum = (arr = []) =>
     return sum;
   }, 0);
 
+const monthPaidExpense = (expenses = []) => {
+  const results = expenses.reduce((acc, e) => {
+    const currentDate = new Date();
+    const month =
+      currentDate.getMonth() < 10
+        ? "0" + (currentDate.getMonth() + 1)
+        : currentDate.getMonth();
+    if (e.createdAt.includes(currentDate.getFullYear() + "-" + month)) {
+      return [...acc, e];
+    }
+    return acc;
+  }, []);
+  return results;
+};
+
 const initForm = () => {
   // Réinitialiser le formulaire
   expenseForm.reset();
@@ -86,13 +101,23 @@ const filterBudgetExpenses = () => {
 };
 
 const displayData = () => {
-  const expensesContainer = document.getElementById("expensesContainer");
+  const unpaidContainer = document.getElementById("unpaidContainer");
+  const paidContainer = document.getElementById("paidContainer");
   const budgetsContainer = document.getElementById("budgetsContainer");
-  expensesContainer.innerHTML = "";
+
+  paidContainer.innerHTML = "";
+  unpaidContainer.innerHTML = "";
   budgetsContainer.innerHTML = "";
+
   const filterBudgets = filterBudgetExpenses();
+
   storeData()?.unPaid.forEach((e) => {
-    displayExpense(e, expensesContainer);
+    displayExpense(e, unpaidContainer);
+  });
+
+  const currentMonthPaidExpenses = monthPaidExpense(storeData()?.paid);
+  currentMonthPaidExpenses.forEach((e) => {
+    displayExpense(e, paidContainer);
   });
   storeData()?.budgets.forEach((b) => {
     displayBudget(b, filterBudgets[b.category.slug], budgetsContainer);

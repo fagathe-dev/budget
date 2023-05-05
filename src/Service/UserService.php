@@ -10,6 +10,7 @@ use App\Breadcrumb\Breadcrumb;
 use App\Breadcrumb\BreadcrumbItem;
 use App\Repository\UserRepository;
 use App\Repository\UserTokenRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
 use Knp\Component\Pager\PaginatorInterface;
@@ -33,10 +34,28 @@ final class UserService
         private UserRepository $repository,
         private UserPasswordHasherInterface $hasher,
         private UrlGeneratorInterface $router,
-        private UserTokenRepository $userTokenRepository
+        private UserTokenRepository $userTokenRepository,
+        private EntityManagerInterface $manager
     ) {
         $this->slugify = new Slugify;
         $this->session = new Session;
+    }
+
+    public function create(User $user):void 
+    {
+        $user->setRegisteredAt($this->now())
+            ->setPassword($this->hasher->hashPassword($user, $user->getPassword()))
+            ->setConfirm($user->getConfirm() ?? false)
+        ;
+
+        $this->save($user);
+    }
+
+    public function update(User $user):void 
+    {
+        $user->setUpdatedAt($this->now());
+
+        $this->save($user);
     }
 
     /**
@@ -47,15 +66,11 @@ final class UserService
      */
     public function save(User $user): void
     {
-        $user->getId() !== null ? $user->setUpdatedAt(new DateTimeImmutable) : $user->setRegisteredAt(new DateTimeImmutable);
-        $user->setPassword($this->hasher->hashPassword($user, $user->getPassword()))
-            ->setConfirm($user->getConfirm() ?? false);
-
         try {
             $this->repository->save($user, true);
 
             if ($user->getUpdatedAt() === null) {
-                // TODO: Envoi de mail confirm création de compte
+                # TODO: Envoi de mail confirm création de compte
             }
             $this->session->getFlashBag()->add('info', 'Utilisateur enregistré.');
 
@@ -133,7 +148,14 @@ final class UserService
         $this->session->getFlashBag()->add('success', 'Votre demande a été pris en compte 👍');
         return true;
     }
-
+    
+    /**
+     * resetPassword
+     *
+     * @param  mixed $token
+     * @param  mixed $password
+     * @return bool
+     */
     public function resetPassword(UserToken $token, ?string $password):bool 
     {   
         $user = $token->getUser();

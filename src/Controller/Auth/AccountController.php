@@ -7,6 +7,7 @@ use App\Service\AccountService;
 use App\Breadcrumb\BreadcrumbItem;
 use App\Form\Auth\ChangeEmailType;
 use App\Form\Auth\ChangePasswordType;
+use App\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,7 +19,8 @@ class AccountController extends AbstractController
 {
     
     public function __construct(
-        private AccountService $service
+        private AccountService $service,
+        private UserService $userService
     ){}
 
     #[Route('', name: 'index', methods: ['GET', 'POST'])]
@@ -35,7 +37,7 @@ class AccountController extends AbstractController
         $formInfo->handleRequest($request);
 
         if($formInfo->isSubmitted() && $formInfo->isValid()) {
-            $this->service->save($user);
+            $this->userService->update($user);
 
             return $this->redirectToRoute('app_account_index');
         }
