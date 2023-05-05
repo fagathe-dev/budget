@@ -41,10 +41,10 @@ final class ApiService
         $budgets = $this->security->getUser()->getBudgets();
         $categories = $this->categoryRepository->findAll();
 
-        $paid = array_filter($expenses, function(Expense $v) {
+        $paid = (array) array_filter($expenses, function(Expense $v) {
             return $v->isIsPaid() && $v->getPaidAt()->format('m-Y') === ($this->now())->format('m-Y');
         });
-        $unPaid = array_filter($expenses, function(Expense $v) {
+        $unPaid = (array) array_filter($expenses, function(Expense $v) {
             return !$v->isIsPaid();
         });
         usort($unPaid, function($a, $b) {
