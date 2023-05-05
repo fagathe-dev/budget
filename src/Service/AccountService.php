@@ -71,7 +71,7 @@ final class AccountService
         ;
 
         try {
-            $this->repository->save($this->user, true);
+            $this->userService->save($this->user);
             // TODO: Envoi de mail confirm mot de passe mis à jour
             $this->session->getFlashBag()->add('info', 'Mot de passe mis à jour 🚀');
         } catch (ORMException $e) {
