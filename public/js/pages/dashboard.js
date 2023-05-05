@@ -10,6 +10,7 @@ const store = (data = {}) => {
   }
   return window.localStorage.setItem("data", JSON.stringify(data));
 };
+
 const storeData = () => JSON.parse(window.localStorage.getItem("data"));
 const expenseForm = document.getElementById("expenseForm");
 
