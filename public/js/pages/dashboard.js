@@ -22,7 +22,7 @@ const sum = (arr = []) =>
   }, 0);
 
 const monthPaidExpense = (expenses = []) => {
-  const results = expenses.reduce((acc, e) => {
+  const results = storeData()?.paid.reduce((acc, e) => {
     const currentDate = new Date();
     const month =
       currentDate.getMonth() < 10
@@ -115,7 +115,7 @@ const displayData = () => {
     displayExpense(e, unpaidContainer);
   });
 
-  const currentMonthPaidExpenses = monthPaidExpense(storeData()?.paid);
+  const currentMonthPaidExpenses = monthPaidExpense();
   currentMonthPaidExpenses.forEach((e) => {
     displayExpense(e, paidContainer);
   });
@@ -130,6 +130,7 @@ const loadData = async () => {
     if (response.ok && response.status === 200) {
       const data = await response.json();
       store(data);
+      console.log(data);
       displayData();
     }
   } catch (e) {
