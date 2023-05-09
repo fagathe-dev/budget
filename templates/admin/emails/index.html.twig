@@ -1,0 +1,20 @@
+{% extends "layouts.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <h1 class="lead">Liste des e-mails</h1>
+        <ul class="list-group list-group-flush">
+            {% for key, email in emails %}
+                <li class="list-group-item">
+                    <a 
+                        href="{{ path('admin_mailing_view', {
+                            email: key
+                        }) }}"
+                    >
+                        {{ email.label }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

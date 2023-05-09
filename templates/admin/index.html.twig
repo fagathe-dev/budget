@@ -57,9 +57,32 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-6">
+            <div class="card card-animate">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1 overflow-hidden">
+                            <div class="text-uppercase fw-medium text-muted text-truncate mb-0">Les e-mails</div>
+                        </div>
+                        <div class="flex-shrink-0"></div>
+                    </div>
+                    <div class="d-flex align-items-end justify-content-between mt-4">
+                        <div>
+                            <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                                <span class="counter-value" data-target="{{ emails|length }}">{{ emails|length }}</span> 
+                            </h4>
+                            <a href="{{ path('admin_mailing_index') }}" class="text-decoration-underline">Afficher les e-mails</a>
+                        </div>
+                        <div class="avatar-sm flex-shrink-0">
+                            <span class="avatar-title bg-warning rounded fs-3">
+                                <i class="ri-mail-send-line"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 
 {% endblock %}
-{# admin user      : ri-group-line
-admin category  : ri-stack-line #}

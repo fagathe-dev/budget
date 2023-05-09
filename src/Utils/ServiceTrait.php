@@ -13,7 +13,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 trait ServiceTrait
 {
     
-       /**
+    /**
      * @param string $string
      * @param string $charset='utf-8'
      *

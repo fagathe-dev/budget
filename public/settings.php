@@ -12,3 +12,4 @@ define('PROFILE_IMAGE_DIRECTORY', 'profile-image' . DIRECTORY_SEPARATOR);
 
 # MAILER CONFIGURATION
 define('DEFAULT_EMAIL_SENDER', 'noreply@agathefrederick.fr');
+define('EMAIL_TEMPLATE_PATH', 'emails' . DIRECTORY_SEPARATOR);

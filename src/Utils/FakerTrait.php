@@ -2,6 +2,8 @@
 namespace App\Utils;
 
 use DateTimeImmutable;
+use Faker\Factory;
+use Faker\Generator;
 
 trait FakerTrait 
 {
@@ -97,6 +99,11 @@ trait FakerTrait
         }
 
         return $originalDateTime->modify('+' . random_int(0, $days) . ' days');
+    }
+
+    public function getFakerFactory(): Generator
+    {
+        return Factory::create('fr_FR');
     }
 
 }
