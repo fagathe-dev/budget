@@ -45,10 +45,12 @@ class MailingController extends AbstractController
                 new BreadcrumbItem('Liste des e-mails', $this->generateUrl('admin_mailing_index')),
                 new BreadcrumbItem($label, $this->generateUrl('admin_mailing_index')),
             ]);
+            $email->setData(false);
+            $emails = MailerEnum::getEmails();
 
             return $this->render('admin/emails/show.html.twig', array_merge(
                 $email->getData(), 
-                compact('label', 'template', 'breadcrumb')
+                compact('label', 'template', 'breadcrumb', 'emails')
             ));
         } else {
             throw $this->createNotFoundException(sprintf("L'email '%s', que vous avez demandé est introuvable.", $param));

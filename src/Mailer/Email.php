@@ -88,4 +88,28 @@ class Email {
     {
         return EMAIL_TEMPLATE_PATH . $this->template;
     }
+
+        /**
+         * Set the value of data
+         *
+         * @return  self
+         */ 
+        public function setData($data)
+        {
+                $this->data = $data;
+
+                return $this;
+        }
+
+        /**
+         * Set the value of isMock
+         *
+         * @return  self
+         */ 
+        public function setMock($isMock)
+        {
+                $this->isMock = $isMock;
+
+                return $this;
+        }
 }

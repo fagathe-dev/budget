@@ -40,7 +40,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->service->save($user);
+            $this->service->create($user);
 
             return $this->redirectToRoute('admin_user_index');
         }

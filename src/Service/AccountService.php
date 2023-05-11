@@ -106,7 +106,6 @@ final class AccountService
         } catch (Exception $e) {
             $this->session->getFlashBag()->add('danger', $e->getMessage());
         }
-        
     }
     
     /**

@@ -39,7 +39,7 @@ final class ApiService
     {
         $expenses = $this->security->getUser()->getExpenses()->toArray();
         $budgets = $this->security->getUser()->getBudgets();
-        $categories = $this->categoryRepository->findAll();
+        $categories = $this->categoryRepository->findAllASC();
 
         $paid = (array) array_filter($expenses, function(Expense $v) {
             return $v->isIsPaid() && $v->getPaidAt()->format('m-Y') === ($this->now())->format('m-Y');

@@ -8,7 +8,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 class WelcomeMail extends AbstractMailer
 {
 
-    public function confirmRegistration(User $user):void 
+    public function emit(User $user):void 
     {
         $this->send(
             (new TemplatedEmail)

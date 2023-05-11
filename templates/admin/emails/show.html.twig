@@ -1,5 +1,48 @@
 {% extends "layouts.html.twig" %}
 
 {% block main %}
-    {% include template %}
+    <div class="row">
+        <div class="list-email">
+            <select 
+                name="email" 
+                id="emailSelect" 
+                class="form-select mb-3"
+                onchange="changeTemplate(event);"
+            >
+                {% for key, email in emails %}
+                    <option value="{{ key }}">{{ email.label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="email-template">
+            
+            {% if source(template, ignore_missing = true) != null %}
+                {% include template %}
+            {% else %}
+                <div class="alert alert-borderless alert-warning shadow" role="alert">
+                    <p class="lead">
+                        <i class="ri-alert-line me-1 align-middle fs-16"></i>
+                        <strong>Error !</strong>
+                    </p>
+                    <p>Impossible de charger la template <u>{{ template }}</u>, la template est introuvable.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        const EMAIL_SHOW_URL = '{{ path('admin_mailing_view') }}';
+        const changeTemplate = (e) => {
+            window.location = EMAIL_SHOW_URL + '?email=' + e.target.value;
+        }
+        (() => {
+            const param = 'email';
+            const url = new URL(window.location.href);
+            const searchParams = url.searchParams;
+
+            document.getElementById('emailSelect').querySelector(`option[value="${searchParams.get(param)}"]`).selected = true;
+        })();
+    </script>
 {% endblock %}

@@ -26,5 +26,11 @@
 }
 
 .auth-wrapper .card {
-    background-color: var(--vz-white);
+  background-color: var(--vz-white);
+}
+
+.logo {
+  height: 100vh;
+  max-height: 75px;
+  width: auto;
 }

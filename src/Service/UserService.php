@@ -1,21 +1,24 @@
 <?php
 namespace App\Service;
 
+use Exception;
 use App\Entity\User;
+use App\Mailer\Email;
 use App\Entity\UserToken;
-use DateTimeImmutable;
+use App\Mailer\MailerEnum;
 use Cocur\Slugify\Slugify;
 use App\Utils\ServiceTrait;
 use App\Breadcrumb\Breadcrumb;
 use App\Breadcrumb\BreadcrumbItem;
 use App\Repository\UserRepository;
+use App\Mailer\Auth\AccountVerifyEmail;
 use App\Repository\UserTokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
-use Exception;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -35,20 +38,35 @@ final class UserService
         private UserPasswordHasherInterface $hasher,
         private UrlGeneratorInterface $router,
         private UserTokenRepository $userTokenRepository,
-        private EntityManagerInterface $manager
+        private EntityManagerInterface $manager,
+        private AccountVerifyEmail $accountVerifyEmail
     ) {
         $this->slugify = new Slugify;
         $this->session = new Session;
     }
 
-    public function create(User $user):void 
+    public function create(User $user, bool $isRegistration = false):void 
     {
         $user->setRegisteredAt($this->now())
             ->setPassword($this->hasher->hashPassword($user, $user->getPassword()))
             ->setConfirm($user->getConfirm() ?? false)
         ;
+        $token = (new UserToken)
+            ->setToken($this->generateToken())
+            ->setExpiredAt($this->now()->modify('+2 days'))
+            ->setCreatedAt($this->now())
+            ->setAction(UserToken::USER_ACCOUNT_VERIFICATION)
+        ;
+        $user->addToken($token);
+        $email = MailerEnum::getEmail(MailerEnum::ACTION_SEND_TOKEN_ACCOUNT_VERIFY);
 
-        $this->save($user);
+        try {
+            $this->accountVerifyEmail->emit($email->setData(compact('token')));
+            $this->save($user);
+        } catch (TransportException $e) {
+            $this->session->getFlashBag()->add('danger', $e->getMessage());
+        }
+
     }
 
     public function update(User $user):void 
@@ -69,14 +87,9 @@ final class UserService
         try {
             $this->repository->save($user, true);
 
-            if ($user->getUpdatedAt() === null) {
-                # TODO: Envoi de mail confirm création de compte
-            }
             $this->session->getFlashBag()->add('info', 'Utilisateur enregistré.');
 
         } catch (ORMException $e) {
-            $this->session->getFlashBag()->add('danger', $e->getMessage());
-        } catch (Exception $e) {
             $this->session->getFlashBag()->add('danger', $e->getMessage());
         }
     }

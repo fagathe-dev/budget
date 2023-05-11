@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Website Icon -->
+    <link rel="shortcut icon" href="{{ absolute_url(asset('img/logo.png')) }}" type="image/png">
     <!-- Layout config Js -->
     <script src="{{ asset('js/layout.js') }}"></script>
     <!-- Bootstrap Css -->
@@ -16,7 +18,13 @@
     <!-- custom Css-->
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet" type="text/css"/>
     {% block stylesheets %}{% endblock %}
-    <title>{% block title %}{% endblock %}</title>
+    <title>
+        {% if title is defined %}
+            {{ title }} - Xpense
+        {% else %}
+            Xpense, Gérer mes dépenses du quotidien
+        {% endif %}
+    </title>
 </head>
 <body>
     

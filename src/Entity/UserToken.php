@@ -34,6 +34,7 @@ class UserToken
 
     public const RESET_PASSWORD_TOKEN = 'RESET_PASSWORD_TOKEN';
     public const USER_EMAIL_VERIFICATION = 'USER_EMAIL_VERIFICATION';
+    public const USER_ACCOUNT_VERIFICATION = 'USER_ACCOUNT_VERIFICATION';
 
     public function getId(): ?int
     {
